@@ -1,5 +1,5 @@
 import type {
-  Asset, ApprovedClaim, ExtractedClaim, Finding, Market, Rule,
+  Asset, ApprovedClaim, ClaimType, ExtractedClaim, Finding, Market, Rule,
   Routing, Verdict, VerdictStatus,
 } from "@/lib/types";
 import { rules as defaultRules, ruleById, ruleSetHash, RULE_SET_VERSION } from "@/data/rules";
@@ -36,8 +36,8 @@ export const RULESET_NEXT: RuleSetOptions = { aiLabelFullDuration: true, version
 function finding(
   ruleId: string,
   parts: {
-    quotedText: string; explanation: string; suggestedFix?: string; altFix?: string;
-    evidenceRef?: string;
+    quotedText: string; explanation: string; suggestedFix?: string; fixReplacement?: string;
+    altFix?: string; evidenceRef?: string;
     /**
      * Severity is outcome-dependent for some rules. ASCI-I-1 is the clear case: the
      * PRD's own test reads "wrong-market match → AMBER; no match → RED" — same clause,
@@ -116,10 +116,15 @@ export function matchClaim(extracted: ExtractedClaim, market: Market, sku: strin
   return { claim: best, confidence: bestScore, outcome: inMarket ? "matched" : "wrong_market" };
 }
 
-/** The market-compliant alternative for the same SKU, if the ledger holds one. */
-function marketAlternative(sku: string, market: Market): ApprovedClaim | undefined {
+/**
+ * The market-compliant alternative for the same SKU. Like-for-like: a tagline is not
+ * a substitute for a performance claim, so the same claim type is required. A rewrite
+ * may only use wording already in the ledger for that market — it never invents a new
+ * substantiated claim (PRD §6 A8).
+ */
+function marketAlternative(sku: string, market: Market, claimType: ClaimType): ApprovedClaim | undefined {
   return ledger.find(
-    (c) => c.productSku === sku && c.status === "active" &&
+    (c) => c.productSku === sku && c.status === "active" && c.claimType === claimType &&
       (c.markets === "all" || (c.markets as Market[]).includes(market)),
   );
 }
@@ -303,12 +308,13 @@ export function evaluate(asset: Asset, opts: RuleSetOptions = RULESET_CURRENT): 
     }
 
     if (m.outcome === "wrong_market") {
-      const alt = marketAlternative(asset.sku, market);
+      const alt = marketAlternative(asset.sku, market, e.claimType);
       findings.push(finding("ASCI-I-1", {
         quotedText: e.claimText,
         severity: "major", // wrong market is AMBER, not RED — the claim exists, the registration does not
         explanation: `"${e.claimText}" is substantiated under ${m.claim!.dossierRef} (${m.claim!.evidenceGrade}), which is not registered for ${marketName}. Claims must be capable of substantiation in the market of publication.`,
         suggestedFix: alt ? `Use "${alt.canonicalText}"` : undefined,
+        fixReplacement: alt?.canonicalText,
         altFix: `Attach ${m.claim!.dossierRef} for ${marketName} to keep the original wording.`,
         evidenceRef: m.claim!.dossierRef,
       }));

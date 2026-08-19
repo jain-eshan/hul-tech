@@ -7,9 +7,9 @@ One line per phase. This is the handoff if a session or usage limit resets mid-b
 | Planning | 20 Aug 04:15 IST | done | Design decisions taken, see DECISIONS.md |
 | 0 · Contract freeze | 20 Aug 05:00 IST | **done** | types, 47 rules, 25 claims, 60 assets. Typecheck clean |
 | 1 · Decision engine | 20 Aug 05:40 IST | **done** | `npm run verify` — 12/12 demo invariants hold |
-| 2 · CLEAR surfaces | — | next | Inbox, Asset Detail, Batch Review. **Hard gate** |
+| 2 · CLEAR surfaces | 20 Aug 07:10 IST | **done** | **Hard gate PASSED** — strip animates, Apply mutates copy and clears the asset |
 | 3 · AI Studio agent | — | blocked | needs team name |
-| 4 · LEDGER + Replay | — | — | |
+| 4 · LEDGER + Replay | — | next | |
 | 5 · Moment Risk + Live Check | — | — | |
 | 9 · Freeze, deploy, record, slides | — | — | never cut |
 
@@ -31,3 +31,4 @@ One line per phase. This is the handoff if a session or usage limit resets mid-b
 | §7.1 vs §7 severity ladder | ASCI-I-1 is `critical` (→ RED), but its own test says wrong-market → AMBER | Severity made outcome-dependent for this rule. A registered claim in the wrong market is a paperwork gap; an unmatched claim is an unsubstantiated assertion |
 | §11.7 row 3 | Pond's listed as "no label", but an unlabelled asset already fails v2026.08 and so can never be *newly* non-compliant | Seeded with a first-3s label, which is what actually transitions |
 | §11.7 row 4 | Sunsilk is a static, and "label for the full duration" is meaningless without a duration | ASCI-AI-M given a prominence arm: below-fold labels fail the tightened rule |
+| §8.1 vs §11.4/§11.5 | Both demo screens offer "72h freshness" as the fix for UK and DE, but the ledger does not register it in either | Registered in UK/DE. It is a consumer-panel descriptive claim, not a clinical one, and a fix that resolves to nothing is worse than no fix |

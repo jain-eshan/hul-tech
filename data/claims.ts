@@ -26,7 +26,11 @@ export const claims: ApprovedClaim[] = [
   {
     id: "CLM-002", canonicalText: "72h freshness", claimType: "performance",
     productSku: "REX-AP-150", brand: "Rexona",
-    markets: ["IN", "AE", "ZA", "BR", "ID", "PH", "VN", "TH", "MX", "EG"],
+    // PRD §8.1 omits UK and DE, but §11.4 and §11.5 both offer this as THE fix for
+    // those two markets — a fix that resolves to nothing is worse than no fix at all.
+    // It is a consumer-panel descriptive claim, not a clinical one, so registering it
+    // in UK/DE is the reconciliation that keeps both sections true.
+    markets: ["IN", "AE", "ZA", "BR", "ID", "PH", "VN", "TH", "MX", "EG", "UK", "DE"],
     dossierRef: "DOS-IN-2291", evidenceGrade: "consumer-panel",
     validFrom: "2024-01-15", expiresOn: null, status: "active",
   },

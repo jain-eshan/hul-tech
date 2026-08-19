@@ -148,6 +148,8 @@ export interface Finding {
   quotedText: string;
   explanation: string;
   suggestedFix?: string;
+  /** The literal replacement text, so Apply can mutate the copy rather than describe a fix. */
+  fixReplacement?: string;
   altFix?: string;
   evidenceRef?: string;
   sourceUrl: string;

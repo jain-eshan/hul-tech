@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PRD §11.1. Light mode only — it projects better. No dark mode by design (§10.6). */
+:root {
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --border: #E7E5E4;
+  --text: #1C1917;
+  --text-muted: #78716C;
+  --verdict-green: #15803D;
+  --verdict-amber: #B45309;
+  --verdict-red: #B91C1C;
+  --accent: #1E3A8A;
+}
+
+/* Inter where the system has it, system stack otherwise. Deliberately not fetched
+   from a font CDN: the full walkthrough must work with wifi off (PRD §13). */
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.section-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+
+/* Grammarly-style underline on the offending span — the claim, not the asset. */
+.underline-finding {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+@keyframes flash { 0% { background: #FEF9C3; } 100% { background: transparent; } }
+.flash { animation: flash 1.2s ease-out; }
