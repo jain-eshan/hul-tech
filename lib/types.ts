@@ -125,6 +125,8 @@ export interface Asset {
   reversibility: number;
   durationSeconds?: number;
   labelDurationSeconds?: number;
+  /** Statics have no duration, so prominence is the label test that applies to them. */
+  labelBelowFold?: boolean;
   containsHumanLikeness?: boolean;
   likenessEnrolled?: boolean;
   createdAt: string;

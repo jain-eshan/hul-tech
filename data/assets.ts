@@ -30,7 +30,7 @@ interface Seed {
   extracted: ExtractedClaim[];
   aiGenerated?: boolean; aiTier?: Asset["aiTier"]; c2paManifest?: boolean;
   reachEstimate?: number; spend?: number; reversibility?: number;
-  durationSeconds?: number; labelDurationSeconds?: number;
+  durationSeconds?: number; labelDurationSeconds?: number; labelBelowFold?: boolean;
   containsHumanLikeness?: boolean; likenessEnrolled?: boolean;
   sourceSystem?: string; createdAt?: string;
 }
@@ -44,6 +44,7 @@ const mk = (s: Seed): Asset => ({
   reachEstimate: s.reachEstimate ?? 120_000, spend: s.spend ?? 250_000,
   reversibility: s.reversibility ?? 0.7,
   durationSeconds: s.durationSeconds, labelDurationSeconds: s.labelDurationSeconds,
+  labelBelowFold: s.labelBelowFold,
   containsHumanLikeness: s.containsHumanLikeness ?? false,
   likenessEnrolled: s.likenessEnrolled ?? true,
   createdAt: s.createdAt ?? "2026-08-19T18:40:00Z",
@@ -130,12 +131,19 @@ const REPLAY_TARGETS: Seed[] = [
   { id: "PF-R3", brand: "Pond's", sku: "PON-CRM-50", campaign: "Age Miracle", market: "IN",
     language: "English", channel: "Instagram", format: "reel", copy: "Fights 10 signs of ageing.",
     extracted: [ex("Fights 10 signs of ageing")], aiGenerated: true, aiTier: "medium",
-    durationSeconds: 15, labelDurationSeconds: 0, reachEstimate: 1_100_000, spend: 2_800_000 },
+    // PRD §11.7 renders this row as "no label". An asset with no label at all already
+    // fails v2026.08, so it could never appear as NEWLY non-compliant under v2026.09.
+    // A first-3s label is what actually transitions, so that is what is seeded.
+    durationSeconds: 15, labelDurationSeconds: 3, reachEstimate: 1_100_000, spend: 2_800_000 },
   { id: "PF-R4", brand: "Sunsilk", sku: "SUN-SH-340", campaign: "Hair Fall Solution", market: "ID",
     language: "Bahasa Indonesia", channel: "Meta", format: "static",
-    copy: "Mengurangi kerontokan rambut sejak keramas pertama.",
-    extracted: [ex("Reduces hair fall from the first wash")], aiGenerated: true, aiTier: "medium",
-    durationSeconds: 1, labelDurationSeconds: 0, reachEstimate: 840_000, spend: 1_400_000 },
+    // Tagline, not an objective claim: the hair-fall dossier is registered for IN only,
+    // and a wrong-market finding here would make this asset non-compliant BEFORE the
+    // rule change, disqualifying it from the replay. The row is about label prominence.
+    copy: "Rambut indah setiap hari.",
+    extracted: [ex("Rambut indah setiap hari", "tagline", "body")], aiGenerated: true, aiTier: "medium",
+    // A static has no duration, so prominence is the arm of ASCI-AI-M that applies.
+    labelBelowFold: true, reachEstimate: 840_000, spend: 1_400_000 },
   { id: "PF-R5", brand: "Vim", sku: "VIM-LIQ-500", campaign: "Tough on Grease", market: "IN",
     language: "Hindi", channel: "Instagram", format: "reel", copy: "बर्तनों पर 99.9% कीटाणुओं को खत्म करता है।",
     extracted: [ex("Kills 99.9% of germs on utensils")], aiGenerated: true, aiTier: "medium",
@@ -187,15 +195,24 @@ const COMPLIANT: Seed[] = [
 ];
 
 // Bulk portfolio filler. Same shape, same engine path — volume for the replay scope.
+// Each COMPLIANT seed may only be replicated into markets where its claim is actually
+// substantiated. Scattering claims across markets at random would generate 30 genuine
+// wrong-market findings and drown the six the replay exists to surface.
+const LEGAL_MARKETS: Record<string, Market[]> = {
+  "PF-01": ["IN"], "PF-02": ["IN"], "PF-03": ["IN", "TH", "PH"], "PF-04": ["IN"],
+  "PF-05": ["IN"], "PF-06": ["IN"], "PF-07": ["IN"], "PF-08": ["IN", "AE", "ZA"],
+  "PF-09": ["IN", "BR", "MX"], "PF-10": ["IN"],
+};
+
 const FILLER: Seed[] = Array.from({ length: 32 }, (_, i) => {
   const base = COMPLIANT[i % COMPLIANT.length];
-  const markets: Market[] = ["IN", "ID", "PH", "TH", "ZA", "BR", "MX", "AE"];
-  const m = markets[i % markets.length];
+  const legal = LEGAL_MARKETS[base.id] ?? ["IN"];
+  const m = legal[i % legal.length];
   return {
     ...base,
     id: `PF-${String(11 + i).padStart(2, "0")}`,
     market: m,
-    language: m === "IN" ? "English" : base.language,
+    language: m === "IN" ? base.language : "English",
     reachEstimate: Math.round((base.reachEstimate ?? 300_000) * (0.35 + ((i * 7) % 11) / 20)),
     // Deliberately compliant: any AI-medium filler labels for its full duration.
     labelDurationSeconds: base.aiTier === "medium" ? base.durationSeconds : undefined,
