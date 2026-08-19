@@ -6,6 +6,8 @@ import { assets } from "@/data/assets";
 import { evaluate } from "@/lib/engine";
 import { VerdictDot, StatCard } from "@/components/Verdict";
 import { fmtReach, cx } from "@/lib/ui";
+import { useMounted } from "@/lib/useMounted";
+import { SkeletonRows } from "@/components/Skeleton";
 import type { VerdictStatus } from "@/lib/types";
 
 // PRD §11.3 — the default landing. No login, no landing page, straight into work.
@@ -13,6 +15,7 @@ import type { VerdictStatus } from "@/lib/types";
 // not typed in: a stat card that cannot be traced to a verdict is a liability.
 
 export default function Inbox() {
+  const mounted = useMounted();
   const rows = useMemo(
     () => assets.map((a) => ({ asset: a, verdict: evaluate(a) })),
     [],
@@ -38,6 +41,15 @@ export default function Inbox() {
   const avgMs = Math.round(
     rows.reduce((s, r) => s + r.verdict.timings.deterministicMs + r.verdict.timings.judgmentMs, 0) / rows.length,
   );
+
+  if (!mounted) {
+    return (
+      <>
+        <h1 className="text-[24px] font-semibold mb-5">Inbox</h1>
+        <SkeletonRows rows={10} />
+      </>
+    );
+  }
 
   return (
     <>

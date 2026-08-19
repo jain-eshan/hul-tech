@@ -7,6 +7,7 @@ import { rexonaVariants } from "@/data/assets";
 import { evaluate } from "@/lib/engine";
 import { RULE_SET_VERSION } from "@/data/rules";
 import { verdictColor, verdictBg, cx } from "@/lib/ui";
+import { useMounted } from "@/lib/useMounted";
 import type { VerdictStatus } from "@/lib/types";
 
 // PRD §11.5 — the market strip. Twelve markets, twelve verdicts, twelve clauses.
@@ -19,6 +20,7 @@ import type { VerdictStatus } from "@/lib/types";
 const RESOLVE_MS = 4000;
 
 export default function BatchReview() {
+  const mounted = useMounted();
   const results = useMemo(
     () => rexonaVariants.map((a) => ({ asset: a, verdict: evaluate(a) })),
     [],
@@ -64,7 +66,7 @@ export default function BatchReview() {
       </div>
 
       {/* The market strip. */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4" suppressHydrationWarning>
         {results.map((r, i) => {
           const isResolved = i < resolved;
           const s = r.verdict.status as VerdictStatus;
@@ -96,7 +98,9 @@ export default function BatchReview() {
           </span>
         ))}
         <span className="mono text-[var(--text-muted)] ml-auto">
-          {shown.reduce((s, r) => s + r.verdict.timings.deterministicMs + r.verdict.timings.judgmentMs, 0)}ms engine time
+          {mounted
+            ? `${shown.reduce((s, r) => s + r.verdict.timings.deterministicMs + r.verdict.timings.judgmentMs, 0)}ms engine time`
+            : "measuring…"}
         </span>
       </div>
 

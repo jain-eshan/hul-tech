@@ -9,11 +9,17 @@ One line per phase. This is the handoff if a session or usage limit resets mid-b
 | 1 · Decision engine | 20 Aug 05:40 IST | **done** | `npm run verify` — 12/12 demo invariants hold |
 | 2 · CLEAR surfaces | 20 Aug 07:10 IST | **done** | **Hard gate PASSED** — strip animates, Apply mutates copy and clears the asset |
 | 3 · AI Studio agent | — | blocked | needs team name |
-| 4 · LEDGER + Replay | — | next | |
-| 5 · Moment Risk + Live Check | — | — | |
-| 9 · Freeze, deploy, record, slides | — | — | never cut |
+| 4 · LEDGER + Replay | 20 Aug 08:05 IST | **done** | Replay re-invokes the engine; response pack assembles |
+| 5 · Moment Risk + Live Check | 20 Aug 08:30 IST | **done** | Refusal is a labelled composite; Live Check falls back silently |
+| 9 · Freeze, deploy, record, slides | — | next | never cut |
 
 **Cut for now** (revisit only if budget allows): WATCH crawl, PULSE, MEMORY, accuracy card.
+
+## Acceptance (`node scripts/acceptance.mjs`, real browser)
+
+17/17 pass, including the four §13 criteria that carry the demos: the strip animating
+to 9/2/1, Apply mutating copy and clearing the asset, Replay producing its six assets
+from the engine, and Live Check never showing an error.
 
 ## Engine facts verified (`npm run verify`)
 

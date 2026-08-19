@@ -11,6 +11,7 @@ import CreativeMock from "@/components/CreativeMock";
 import FindingCard from "@/components/FindingCard";
 import { VerdictChip } from "@/components/Verdict";
 import { severityColor, cx } from "@/lib/ui";
+import { useMounted } from "@/lib/useMounted";
 import type { Finding, VerdictStatus } from "@/lib/types";
 
 // PRD §11.4 — the hero screen.
@@ -24,6 +25,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
   const asset = assetById.get(params.id);
   if (!asset) notFound();
 
+  const mounted = useMounted();
   const { appliedFixes, applyFix, overrides, appendLedger, persona } = useApp();
   const [flash, setFlash] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
@@ -110,6 +112,9 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
         <span className="mono text-[var(--text-muted)]">{asset.id}</span>
       </div>
 
+      {!mounted ? (
+        <div className="border border-[var(--border)] rounded bg-[var(--surface)] h-[420px]" />
+      ) : (
       <div className="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-7 items-start">
         <div className={cx(flash && "flash")}>
           <CreativeMock asset={asset} copy={copy} />
@@ -177,6 +182,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+      )}
     </>
   );
 }
