@@ -8,7 +8,7 @@ One line per phase. This is the handoff if a session or usage limit resets mid-b
 | 0 · Contract freeze | 20 Aug 05:00 IST | **done** | types, 47 rules, 25 claims, 60 assets. Typecheck clean |
 | 1 · Decision engine | 20 Aug 05:40 IST | **done** | `npm run verify` — 12/12 demo invariants hold |
 | 2 · CLEAR surfaces | 20 Aug 07:10 IST | **done** | **Hard gate PASSED** — strip animates, Apply mutates copy and clears the asset |
-| 3 · AI Studio agent | — | blocked | needs team name |
+| 3 · AI Studio agent | 20 Aug 08:45 IST | **prompt ready** | `docs/AI-STUDIO-PROMPT.md` — paste and publish. Still needs the team name |
 | 4 · LEDGER + Replay | 20 Aug 08:05 IST | **done** | Replay re-invokes the engine; response pack assembles |
 | 5 · Moment Risk + Live Check | 20 Aug 08:30 IST | **done** | Refusal is a labelled composite; Live Check falls back silently |
 | 9 · Freeze, deploy, record, slides | — | next | never cut |
