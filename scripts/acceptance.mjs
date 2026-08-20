@@ -205,6 +205,68 @@ await page.selectOption("aside select", "legal");
 await page.waitForTimeout(500);
 check("Legal clears but does not publish", await page.locator("button:has-text('Ship')").isDisabled());
 
+// ── Persona QA fixes ──────────────────────────────────────────────────────
+await page.goto(`${BASE}/`, { waitUntil: "load" });
+await page.waitForTimeout(700);
+const allRows = await page.locator("tbody tr").count();
+await page.selectOption("aside select", "legal");
+await page.waitForTimeout(600);
+const legalRows = await page.locator("tbody tr").count();
+check("Legal lands on a triaged queue, not the full portfolio (§3.2)",
+  legalRows > 0 && legalRows < allRows, `${legalRows} of ${allRows}`);
+check("The hidden auto-cleared count is stated, not hidden",
+  (await text()).includes("auto-cleared hidden"));
+await page.click("text=auto-cleared hidden");
+await page.waitForTimeout(500);
+check("The queue filter is removable", (await page.locator("tbody tr").count()) === allRows);
+
+check("Inbox shows the specified 'cleared in' column",
+  (await page.locator("thead th").allInnerTexts()).join().toLowerCase().includes("cleared in"));
+
+// Whole-row click (§11.3)
+await page.locator("tbody tr").first().click({ position: { x: 400, y: 10 } });
+await page.waitForTimeout(900);
+check("Row click opens Asset Detail (§11.3)", page.url().includes("/asset/"));
+check("Asset Detail has a page title", (await page.locator("h1").count()) === 1);
+
+// Moment Risk actions are real and gated
+await page.goto(`${BASE}/moment`, { waitUntil: "load" });
+await page.waitForTimeout(700);
+check("ABM cannot override a refusal",
+  await page.locator("button:has-text('Override with justification')").isDisabled());
+await page.selectOption("aside select", "legal");
+await page.waitForTimeout(500);
+check("Legal can override a refusal",
+  !(await page.locator("button:has-text('Override with justification')").isDisabled()));
+await page.click("button:has-text('Request legal review')");
+await page.waitForTimeout(600);
+check("Moment Risk actions record an outcome", (await text()).includes("recorded by"));
+await page.click("aside >> text=Audit Trail");
+await page.waitForTimeout(600);
+check("Moment Risk decision reaches the audit trail", (await text()).includes("moment risk"));
+
+// Ship records a release rather than pretending to publish
+await page.goto(`${BASE}/batch`, { waitUntil: "load" });
+await page.waitForTimeout(700);
+await page.click("text=Run clearance");
+await page.waitForTimeout(4600);
+await page.click("button:has-text('Ship')");
+await page.waitForTimeout(600);
+check("Ship records a release decision", (await text()).includes("released"));
+check("Ship states that PRAMAAN never publishes", (await text()).includes("never publishes"));
+
+// Creator fix requests are logged
+await page.goto(`${BASE}/watch`, { waitUntil: "load" });
+await page.waitForTimeout(800);
+await page.locator("button:has-text('Send fix request')").first().click();
+await page.waitForTimeout(500);
+await page.click("button:has-text('Send and start the clock')");
+await page.waitForTimeout(600);
+check("Sent fix request is marked on the row", (await text()).includes("48h clock"));
+await page.click("aside >> text=Audit Trail");
+await page.waitForTimeout(600);
+check("Fix request reaches the audit trail", (await text()).includes("fix request sent"));
+
 // ── Integrity ──────────────────────────────────────────────────────────────
 await page.goto(`${BASE}/asset/REX-12`, { waitUntil: "load" });
 await page.waitForTimeout(3000);

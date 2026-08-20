@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { assets } from "@/data/assets";
 import { evaluate } from "@/lib/engine";
 import { VerdictDot, StatCard } from "@/components/Verdict";
@@ -18,11 +19,18 @@ import type { VerdictStatus } from "@/lib/types";
 export default function Inbox() {
   const mounted = useMounted();
   const { persona } = useApp();
-  const cols = PERSONAS[persona].columns;
+  const router = useRouter();
+  const spec = PERSONAS[persona];
+  const cols = spec.columns;
   const rows = useMemo(
     () => assets.map((a) => ({ asset: a, verdict: evaluate(a) })),
     [],
   );
+
+  // Legal lands on the triaged queue. Visible and removable — the count of what is
+  // filtered out is the point being made, so it is stated rather than hidden.
+  const [queueOnly, setQueueOnly] = useState(false);
+  useEffect(() => setQueueOnly(spec.defaultQueue === "needs_human"), [spec.defaultQueue]);
 
   const [brand, setBrand] = useState("all");
   const [market, setMarket] = useState("all");
@@ -31,8 +39,11 @@ export default function Inbox() {
   const brands = useMemo(() => Array.from(new Set(assets.map((a) => a.brand))).sort(), []);
   const markets = useMemo(() => Array.from(new Set(assets.map((a) => a.market))).sort(), []);
 
+  const autoCleared = rows.filter((r) => r.verdict.routing === "auto").length;
+
   const filtered = rows.filter(
     (r) =>
+      (!queueOnly || r.verdict.routing !== "auto") &&
       (brand === "all" || r.asset.brand === brand) &&
       (market === "all" || r.asset.market === market) &&
       (status === "all" || r.verdict.status === status),
@@ -82,7 +93,13 @@ export default function Inbox() {
             {f.opts.map((o) => <option key={o} value={o}>{o}</option>)}
           </select>
         ))}
-        {filtered.length !== rows.length && (
+        {queueOnly && (
+          <button onClick={() => setQueueOnly(false)}
+            className="text-[13px] text-[var(--accent)] px-2">
+            Judgment calls only · {autoCleared} auto-cleared hidden
+          </button>
+        )}
+        {filtered.length !== rows.length && !queueOnly && (
           <button onClick={() => { setBrand("all"); setMarket("all"); setStatus("all"); }}
             className="text-[13px] text-[var(--accent)] px-2">Clear filters</button>
         )}
@@ -92,7 +109,7 @@ export default function Inbox() {
         <table className="w-full text-[13px]">
           <thead>
             <tr className="border-b border-[var(--border)] text-left">
-              {["", "Brand", "Campaign", "Format", "Market", "Findings"].map((h) => (
+              {["", "Brand", "Campaign", "Format", "Market", "Findings", "Cleared in"].map((h) => (
                 <th key={h} className="section-header font-semibold px-3 py-2">{h}</th>
               ))}
               {/* Columns follow the role. Legal reviews the routing queue; the
@@ -101,12 +118,16 @@ export default function Inbox() {
               {cols.includes("routing") && <th className="section-header font-semibold px-3 py-2">Routing</th>}
               {cols.includes("reach") && <th className="section-header font-semibold px-3 py-2">Reach</th>}
               {cols.includes("spend") && <th className="section-header font-semibold px-3 py-2">Spend</th>}
-              <th className="section-header font-semibold px-3 py-2">Engine</th>
+              <th className="section-header font-semibold px-3 py-2">Route</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map(({ asset, verdict }) => (
-              <tr key={asset.id} className="border-b border-[var(--border)] last:border-0 hover:bg-[var(--bg)]">
+              // §11.3: row click opens the asset. The brand cell stays a real link so
+              // middle-click and open-in-new-tab still work.
+              <tr key={asset.id}
+                onClick={() => router.push(`/asset/${asset.id}`)}
+                className="border-b border-[var(--border)] last:border-0 hover:bg-[var(--bg)] cursor-pointer">
                 <td className="px-3 py-2.5 w-8"><VerdictDot status={verdict.status as VerdictStatus} /></td>
                 <td className="px-3 py-2.5 font-medium">
                   <Link href={`/asset/${asset.id}`} className="hover:text-[var(--accent)]">{asset.brand}</Link>
@@ -116,6 +137,10 @@ export default function Inbox() {
                 <td className="px-3 py-2.5 mono">{asset.market} · {asset.language}</td>
                 <td className={cx("px-3 py-2.5 mono", verdict.findings.length > 0 && "font-semibold")}>
                   {verdict.findings.length || "—"}
+                </td>
+                {/* §11.3 "cleared in" — engine time, which is what clearance actually cost. */}
+                <td className="px-3 py-2.5 mono text-[var(--text-muted)]">
+                  {verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms
                 </td>
                 {cols.includes("severity") && (
                   <td className="px-3 py-2.5 mono" style={{ color: verdict.findings.length ? severityColor[verdict.findings[0].severity] : undefined }}>
@@ -132,7 +157,7 @@ export default function Inbox() {
                   <td className="px-3 py-2.5 mono text-[var(--text-muted)]">₹{(asset.spend / 100000).toFixed(1)}L</td>
                 )}
                 <td className="px-3 py-2.5 mono text-[var(--text-muted)]">
-                  {verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms
+                  {verdict.routing === "auto" ? "auto" : verdict.routing.replace("_", " ")}
                 </td>
               </tr>
             ))}

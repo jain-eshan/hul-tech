@@ -1,6 +1,8 @@
 "use client";
 
-import { Ban, ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { Ban, ArrowUpRight, Check } from "lucide-react";
+import { useApp, canOverride, approverName, PERSONAS } from "@/lib/store";
 import { verdictColor, verdictBg } from "@/lib/ui";
 import { brandCodex } from "@/data/claims";
 import type { Market } from "@/lib/types";
@@ -48,6 +50,26 @@ const CARDS = [
 ];
 
 export default function MomentRisk() {
+  const { persona, appendLedger } = useApp();
+  const [outcome, setOutcome] = useState<string | null>(null);
+  const [justifying, setJustifying] = useState(false);
+  const [reason, setReason] = useState("");
+
+  // Overriding a refusal is the highest-consequence override in the product, so it is
+  // gated exactly as a finding override is. An ABM who can override a refusal but not a
+  // spelling flag would be a governance model that runs backwards.
+  const mayOverride = canOverride(persona);
+
+  const record = (action: string, reasoning?: string) => {
+    appendLedger({
+      assetId: "MOMENT-2026-08", ruleSetVersion: "v2026.08",
+      status: action === "Override" ? "OVERRIDDEN" : "RED",
+      findings: 4, approver: approverName(persona),
+      action: `Moment Risk — ${action}`, reasoning,
+    });
+    setOutcome(action);
+  };
+
   const counts = {
     GREEN: GRID.filter((g) => g.level === "GREEN").length,
     AMBER: GRID.filter((g) => g.level === "AMBER").length,
@@ -133,20 +155,56 @@ export default function MomentRisk() {
         </p>
       </div>
 
-      <div className="flex gap-2">
-        <button className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)]">
-          Override with justification
-        </button>
-        <button className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)]">
-          Request legal review
-        </button>
-        <button className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)]">
-          Archive
-        </button>
-        <span className="text-[12px] text-[var(--text-muted)] self-center ml-2 flex items-center gap-1">
-          Override is always available and always logged <ArrowUpRight size={11} />
-        </span>
-      </div>
+      {outcome ? (
+        <div className="border border-[var(--border)] rounded bg-[var(--bg)] px-4 py-3 text-[13px] flex items-center gap-2">
+          <Check size={14} className="text-[var(--verdict-green)]" />
+          <span>
+            <strong>{outcome}</strong> recorded by {PERSONAS[persona].label} and written to
+            the audit trail. Every decision on a refusal is logged, including the decision
+            to disagree with it.
+          </span>
+        </div>
+      ) : justifying ? (
+        <div className="border border-[var(--border)] rounded bg-[var(--surface)] px-4 py-3 space-y-2">
+          <div className="section-header">Override the refusal</div>
+          <textarea
+            autoFocus value={reason} onChange={(e) => setReason(e.target.value)}
+            placeholder="Why is activating on this moment acceptable? This is logged, and the log is the training signal."
+            className="w-full text-[13px] border border-[var(--border)] rounded px-2 py-1.5 h-20 resize-none" />
+          <div className="flex gap-2">
+            <button onClick={() => reason.trim() && record("Override", reason.trim())}
+              disabled={!reason.trim()}
+              className="text-[13px] px-3 py-1.5 rounded bg-[var(--accent)] text-white disabled:opacity-40">
+              Log override and activate
+            </button>
+            <button onClick={() => setJustifying(false)}
+              className="text-[13px] px-3 py-1.5 text-[var(--text-muted)]">Cancel</button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex gap-2 items-center flex-wrap">
+          <button
+            onClick={() => setJustifying(true)}
+            disabled={!mayOverride}
+            title={mayOverride ? undefined : "Overriding a refusal sits with Legal and the Brand Director"}
+            className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)] disabled:opacity-35 disabled:cursor-not-allowed">
+            Override with justification
+          </button>
+          <button onClick={() => record("Escalated to legal review")}
+            className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)]">
+            Request legal review
+          </button>
+          <button onClick={() => record("Archived")}
+            className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)]">
+            Archive
+          </button>
+          <span className="text-[12px] text-[var(--text-muted)] self-center ml-1 flex items-center gap-1">
+            {mayOverride
+              ? "Override is always available and always logged"
+              : `Signed in as ${PERSONAS[persona].role}`} <ArrowUpRight size={11} />
+          </span>
+        </div>
+      )}
     </>
   );
 }

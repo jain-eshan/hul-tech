@@ -6,6 +6,7 @@ import { creatorPosts } from "@/data/creatorPosts";
 import { snapshots } from "@/data/observations";
 import { sweepPost, fixRequest } from "@/lib/engine/sweep";
 import { useMounted } from "@/lib/useMounted";
+import { useApp, approverName } from "@/lib/store";
 import { VerdictDot } from "@/components/Verdict";
 import { verdictColor, verdictLabel } from "@/lib/ui";
 import type { VerdictStatus } from "@/lib/types";
@@ -17,6 +18,8 @@ import type { VerdictStatus } from "@/lib/types";
 
 export default function CreatorSweep() {
   const mounted = useMounted();
+  const { persona, appendLedger } = useApp();
+  const [sent, setSent] = useState<string[]>([]);
   const [snapFor, setSnapFor] = useState<string | null>(null);
   const [fixFor, setFixFor] = useState<string | null>(null);
 
@@ -91,10 +94,14 @@ export default function CreatorSweep() {
                   </td>
                   <td className="px-3 py-2.5 text-right whitespace-nowrap">
                     {r.status !== "GREEN" && (
-                      <button onClick={() => setFixFor(r.post.id)}
-                        className="text-[12px] px-2.5 py-1 rounded border border-[var(--accent)] text-[var(--accent)] hover:bg-[#EFF6FF]">
-                        Send fix request
-                      </button>
+                      sent.includes(r.post.id) ? (
+                        <span className="mono text-[var(--text-muted)]">sent · 48h clock</span>
+                      ) : (
+                        <button onClick={() => setFixFor(r.post.id)}
+                          className="text-[12px] px-2.5 py-1 rounded border border-[var(--accent)] text-[var(--accent)] hover:bg-[#EFF6FF]">
+                          Send fix request
+                        </button>
+                      )
                     )}
                   </td>
                 </tr>
@@ -172,7 +179,21 @@ export default function CreatorSweep() {
               <span className="mono text-[var(--text-muted)]">
                 deadline 48h · escalates to agency, then to brand team
               </span>
-              <button onClick={() => setFixFor(null)}
+              <button
+                onClick={() => {
+                  // Apply and Justify both write to the ledger. An action taken against a
+                  // live in-market breach must too, or the evidence plane has a hole
+                  // exactly where enforcement happens.
+                  appendLedger({
+                    assetId: fixResult.post.id, ruleSetVersion: "v2026.08",
+                    status: fixResult.status, findings: fixResult.findings.length,
+                    approver: approverName(persona),
+                    action: `Fix request sent — ${fixResult.post.handle}`,
+                    reasoning: `${fixResult.findings.map((f) => f.ruleId).join(", ")} · 48h deadline · escalates to agency then brand team`,
+                  });
+                  setSent((s) => [...s, fixResult.post.id]);
+                  setFixFor(null);
+                }}
                 className="text-[13px] px-3 py-1.5 rounded bg-[var(--accent)] text-white">
                 Send and start the clock
               </button>

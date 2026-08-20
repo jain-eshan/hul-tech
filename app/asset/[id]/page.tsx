@@ -149,6 +149,10 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
         <span className="mono text-[var(--text-muted)]">{asset.id}</span>
       </div>
 
+      <h1 className="text-[24px] font-semibold mb-5">
+        {asset.brand} <span className="text-[var(--text-muted)] font-normal">· {asset.market} · {asset.format}</span>
+      </h1>
+
       {!mounted ? (
         <div className="border border-[var(--border)] rounded bg-[var(--surface)] h-[420px]" />
       ) : (

@@ -75,6 +75,13 @@ export interface PersonaSpec {
   canSetRouting: boolean;
   /** Extra Inbox columns beyond the base set. */
   columns: ("routing" | "severity" | "reach" | "spend")[];
+  /**
+   * Legal's queue is judgment calls only (§3.2). The whole before/after in §3.1 is
+   * "40 assets untriaged" becoming "4 flagged assets" — showing Legal all 60, of which
+   * 53 auto-cleared, renders the *before* picture inside the product that claims to fix
+   * it. Auto-cleared work never reached a human and should not sit in a human's queue.
+   */
+  defaultQueue: "all" | "needs_human";
 }
 
 export const PERSONAS: Record<Persona, PersonaSpec> = {
@@ -86,6 +93,7 @@ export const PERSONAS: Record<Persona, PersonaSpec> = {
     canShip: true,
     canSetRouting: false,
     columns: [],
+    defaultQueue: "all",
   },
   legal: {
     label: "Legal Counsel",
@@ -96,6 +104,7 @@ export const PERSONAS: Record<Persona, PersonaSpec> = {
     canShip: false,
     canSetRouting: false,
     columns: ["routing", "severity"],
+    defaultQueue: "needs_human",
   },
   director: {
     label: "Brand Director",
@@ -105,6 +114,7 @@ export const PERSONAS: Record<Persona, PersonaSpec> = {
     canShip: true,
     canSetRouting: true,
     columns: ["reach", "spend"],
+    defaultQueue: "all",
   },
 };
 
