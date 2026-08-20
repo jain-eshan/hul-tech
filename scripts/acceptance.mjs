@@ -5,7 +5,7 @@
 // Batched deliberately: running these after every screen costs a full context
 // re-read each time, so they run once, at the end, as the plan's Phase 9 gate.
 
-import { chromium } from "playwright";
+import { chromium } from "playwright-core";
 
 const BASE = process.env.BASE ?? "http://localhost:3121";
 const browser = await chromium.launch({

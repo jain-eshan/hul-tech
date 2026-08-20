@@ -3,7 +3,7 @@
 // Simulated by aborting every request that leaves localhost — including the Gemini
 // call behind Live Check, which must degrade silently rather than show an error.
 
-import { chromium } from "playwright";
+import { chromium } from "playwright-core";
 
 const BASE = process.env.BASE ?? "http://localhost:3150";
 const browser = await chromium.launch({

@@ -11,7 +11,7 @@
 // Usage:  npx next build && npx next start -p 3140 &
 //         node scripts/capture-snapshots.mjs
 
-import { chromium } from "playwright";
+import { chromium } from "playwright-core";
 import { createHash } from "node:crypto";
 import { writeFileSync, mkdirSync } from "node:fs";
 import { creatorPosts } from "../data/creatorPosts.mjs";
