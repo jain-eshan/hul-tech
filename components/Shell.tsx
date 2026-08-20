@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Stamp, RotateCcw, Menu, X } from "lucide-react";
 import { useApp, personaLabel } from "@/lib/store";
-import { RULE_SET_VERSION } from "@/data/rules";
+import { RULE_SET_LABEL } from "@/data/rules";
 import { TourButton } from "./Tour";
 import type { Persona } from "@/lib/types";
 import { cx } from "@/lib/ui";
@@ -18,7 +18,7 @@ const NAV: { group: string; items: { href: string; label: string }[] }[] = [
     { href: "/", label: "Inbox" },
     { href: "/batch", label: "Batch Review" },
     { href: "/moment", label: "Moment Risk" },
-    { href: "/ring0", label: "Ring 0" },
+    { href: "/ring0", label: "Constrain at generation" },
   ]},
   { group: "WATCH", items: [
     { href: "/watch", label: "Creator Sweep" },
@@ -50,8 +50,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       <aside
         onClick={() => setNavOpen(false)}
         className={cx(
-          "w-[240px] shrink-0 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col",
-          "fixed inset-y-0 left-0 z-40 transition-transform duration-200 md:static md:translate-x-0",
+          "w-[240px] shrink-0 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col h-screen overflow-y-auto",
+          // Fixed pins it to the viewport as a drawer below md; sticky keeps it in
+          // place above md without the drawer's transform/backdrop machinery.
+          "fixed inset-y-0 left-0 z-40 transition-transform duration-200 md:sticky md:top-0 md:translate-x-0",
           navOpen ? "translate-x-0" : "-translate-x-full",
         )}>
         <div className="px-5 h-14 flex items-center justify-between gap-2 border-b border-[var(--border)]">
@@ -125,7 +127,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         <div className="flex-1 max-w-[1280px] w-full px-4 md:px-8 py-7">{children}</div>
         {/* Persistent on every page. Scope honesty is cheaper than being caught (§10.2). */}
         <footer className="border-t border-[var(--border)] px-4 md:px-8 py-2.5 mono text-[var(--text-muted)]">
-          Prototype · rule text paraphrased for machine execution · portfolio data illustrative · rule set {RULE_SET_VERSION}
+          Prototype · rule text paraphrased for machine execution · portfolio data illustrative · {RULE_SET_LABEL}
         </footer>
       </main>
     </div>

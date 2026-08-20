@@ -8,18 +8,19 @@ import { evaluate } from "@/lib/engine";
 import { ruleSetHash, RULE_SET_VERSION } from "@/data/rules";
 import { claims } from "@/data/claims";
 import { useMounted } from "@/lib/useMounted";
+import { routingLabel } from "@/lib/ui";
 
 // PRD §11.8. Append-only: this table has no edit path and no delete path, because
 // defensibility is a schema property rather than a feature (§9.4).
 
 const SEEDED = [
   { id: "S-3", timestamp: "2026-08-19 18:42:11", assetId: "REX-02", ruleSetVersion: RULE_SET_VERSION,
-    status: "GREEN", findings: 0, approver: "auto-clear", action: "Cleared — routing: auto", reasoning: undefined },
+    status: "GREEN", findings: 0, approver: "auto-clear", action: "Cleared — no approver needed", reasoning: undefined },
   { id: "S-2", timestamp: "2026-08-19 18:41:55", assetId: "REX-12", ruleSetVersion: RULE_SET_VERSION,
     status: "RED", findings: 1, approver: "Legal Counsel", action: "Blocked — ASCI-AI-H",
     reasoning: "Unenrolled likeness. High-risk tier is prohibited; regeneration requested." },
   { id: "S-1", timestamp: "2026-08-19 18:41:02", assetId: "PF-R1", ruleSetVersion: RULE_SET_VERSION,
-    status: "GREEN", findings: 0, approver: "Priya Sharma · ABM", action: "Cleared — routing: single_approver", reasoning: undefined },
+    status: "GREEN", findings: 0, approver: "Priya Sharma · ABM", action: "Cleared — one approver", reasoning: undefined },
 ];
 
 export default function AuditTrail() {
@@ -99,7 +100,7 @@ export default function AuditTrail() {
                 ["Market / channel", `${asset.market} · ${asset.language} · ${asset.channel}`],
                 ["Asset hash", asset.hash],
                 ["Rule set version", `${RULE_SET_VERSION} · ${verdict.ruleSetVersionHash}`],
-                ["Verdict", `${verdict.status} · confidence ${verdict.confidence} · routing ${verdict.routing}`],
+                ["Verdict", `${verdict.status} · confidence ${verdict.confidence} · approved by ${routingLabel[verdict.routing].toLowerCase()}`],
                 ["Clauses cited", verdict.findings.map((f) => `${f.ruleId} (${f.clauseRef})`).join("; ") || "none — cleared"],
                 ["Substantiation dossier", dossier ? `${dossier.dossierRef} · ${dossier.evidenceGrade} · "${dossier.canonicalText}"` : "n/a"],
                 ["Model versions", Object.entries(verdict.modelVersions).map(([k, v]) => `${k}=${v}`).join(", ")],

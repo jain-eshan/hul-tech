@@ -14,6 +14,13 @@ import type { Rule } from "@/lib/types";
 
 export const RULE_SET_VERSION = "v2026.08";
 
+/**
+ * The same rule set said as a date, for screens a brand manager reads. The evidence
+ * surfaces — audit trail and regulator response pack — keep RULE_SET_VERSION, because
+ * a regulator needs the exact token and not a friendly paraphrase of it.
+ */
+export const RULE_SET_LABEL = "rules as of Aug 2026";
+
 const ASCI = "https://www.ascionline.in/the-asci-code/";
 const ASCI_GUIDELINES = "https://www.ascionline.in/guidelines/";
 const CCPA = "https://consumeraffairs.nic.in/";

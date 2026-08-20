@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { assets } from "@/data/assets";
 import { evaluate } from "@/lib/engine";
 import { VerdictDot, StatCard } from "@/components/Verdict";
-import { fmtReach, cx, severityColor } from "@/lib/ui";
+import { fmtReach, cx, severityColor, severityLabel, routingLabel } from "@/lib/ui";
 import { useMounted } from "@/lib/useMounted";
 import { useApp, PERSONAS } from "@/lib/store";
 import { SkeletonRows } from "@/components/Skeleton";
@@ -78,7 +78,7 @@ export default function Inbox() {
         <StatCard label="Awaiting clearance" value={String(awaiting)} note="needs edit or blocked" />
         <StatCard label="Cleared" value={String(cleared)} note="ship without asking" />
         <StatCard label="First-pass rate" value={`${firstPass}%`} note="target 80%" />
-        <StatCard label="Engine time" value={`${avgMs}ms`} note="median, deterministic + judgment" />
+        <StatCard label="Engine time" value={`${avgMs}ms`} note="median, rule checks + AI checks" />
       </div>
 
       <div className="flex gap-2 mb-3">
@@ -114,11 +114,10 @@ export default function Inbox() {
               ))}
               {/* Columns follow the role. Legal reviews the routing queue; the
                   director signs off by consequence, so sees exposure. */}
-              {cols.includes("severity") && <th className="section-header font-semibold px-3 py-2">Top severity</th>}
-              {cols.includes("routing") && <th className="section-header font-semibold px-3 py-2">Routing</th>}
+              {cols.includes("severity") && <th className="section-header font-semibold px-3 py-2">Action needed</th>}
               {cols.includes("reach") && <th className="section-header font-semibold px-3 py-2">Reach</th>}
               {cols.includes("spend") && <th className="section-header font-semibold px-3 py-2">Spend</th>}
-              <th className="section-header font-semibold px-3 py-2">Route</th>
+              <th className="section-header font-semibold px-3 py-2">Who approves</th>
             </tr>
           </thead>
           <tbody>
@@ -143,12 +142,9 @@ export default function Inbox() {
                   {verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms
                 </td>
                 {cols.includes("severity") && (
-                  <td className="px-3 py-2.5 mono" style={{ color: verdict.findings.length ? severityColor[verdict.findings[0].severity] : undefined }}>
-                    {verdict.findings[0]?.severity ?? "—"}
+                  <td className="px-3 py-2.5" style={{ color: verdict.findings.length ? severityColor[verdict.findings[0].severity] : undefined }}>
+                    {verdict.findings[0] ? severityLabel[verdict.findings[0].severity] : "—"}
                   </td>
-                )}
-                {cols.includes("routing") && (
-                  <td className="px-3 py-2.5 mono text-[var(--text-muted)]">{verdict.routing}</td>
                 )}
                 {cols.includes("reach") && (
                   <td className="px-3 py-2.5 mono text-[var(--text-muted)]">{fmtReach(asset.reachEstimate)}</td>
@@ -156,8 +152,8 @@ export default function Inbox() {
                 {cols.includes("spend") && (
                   <td className="px-3 py-2.5 mono text-[var(--text-muted)]">₹{(asset.spend / 100000).toFixed(1)}L</td>
                 )}
-                <td className="px-3 py-2.5 mono text-[var(--text-muted)]">
-                  {verdict.routing === "auto" ? "auto" : verdict.routing.replace("_", " ")}
+                <td className="px-3 py-2.5 text-[var(--text-muted)]">
+                  {routingLabel[verdict.routing]}
                 </td>
               </tr>
             ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import type { VerdictStatus, Severity } from "@/lib/types";
-import { verdictColor, verdictBg, verdictLabel, severityColor } from "@/lib/ui";
+import { verdictColor, verdictBg, verdictLabel, severityColor, severityLabel } from "@/lib/ui";
 
 export function VerdictDot({ status, size = 8 }: { status: VerdictStatus; size?: number }) {
   return (
@@ -23,7 +23,7 @@ export function VerdictChip({
     return (
       <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded text-[13px] font-medium border border-dashed border-[var(--text-muted)] text-[var(--text-muted)] bg-[var(--bg)]">
         <span className="inline-block w-2 h-2 rounded-full border border-[var(--text-muted)]" />
-        Not cleared — abstained
+        Not cleared — escalated to a human
         {confidence !== undefined && <span className="mono opacity-80">confidence {confidence.toFixed(2)}</span>}
         {clearedIn && <span className="mono opacity-80">· {clearedIn}</span>}
       </span>
@@ -63,7 +63,7 @@ export function SeverityTag({ severity, draft }: { severity: Severity; draft?: b
   return (
     <span className="inline-flex items-center gap-1.5">
       <span style={{ color: severityColor[severity] }} className="mono uppercase tracking-wide">
-        {severity}
+        {severityLabel[severity]}
       </span>
       {draft && (
         <span className="mono uppercase px-1 py-0.5 rounded bg-[var(--bg)] border border-[var(--border)] text-[var(--text-muted)]">

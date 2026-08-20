@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Play, RotateCcw } from "lucide-react";
 import { rexonaVariants } from "@/data/assets";
 import { evaluate } from "@/lib/engine";
-import { RULE_SET_VERSION } from "@/data/rules";
+import { RULE_SET_VERSION, RULE_SET_LABEL } from "@/data/rules";
 import { verdictColor, verdictBg, cx } from "@/lib/ui";
 import { useMounted } from "@/lib/useMounted";
 import { useApp, canShip, approverName, PERSONAS } from "@/lib/store";
@@ -65,7 +65,7 @@ export default function BatchReview() {
         </button>
       </div>
       <div className="mono text-[var(--text-muted)] mb-6">
-        12 variants · 12 markets · rule set {RULE_SET_VERSION} · {resolved}/{results.length} evaluated
+        12 variants · 12 markets · {RULE_SET_LABEL} · {resolved}/{results.length} evaluated
       </div>
 
       {/* The market strip. */}

@@ -6,7 +6,7 @@ import { GitCompare } from "lucide-react";
 import { portfolio, LIVE_PORTFOLIO_SCOPE } from "@/data/assets";
 import { evaluate, RULESET_CURRENT, RULESET_NEXT } from "@/lib/engine";
 import { ruleById, ruleSetHash } from "@/data/rules";
-import { fmtReach, verdictColor } from "@/lib/ui";
+import { fmtReach, verdictColor, severityLabel } from "@/lib/ui";
 import type { Asset, Verdict } from "@/lib/types";
 
 // PRD §11.7 — Demo C, the capability nobody ships.
@@ -82,14 +82,14 @@ export default function RuleReplay() {
       {phase !== "idle" && (
         <>
           <div className="border border-[var(--border)] rounded bg-[var(--surface)] mb-5">
-            <div className="px-4 py-2.5 border-b border-[var(--border)] section-header">Diff · v2026.08 → v2026.09</div>
+            <div className="px-4 py-2.5 border-b border-[var(--border)] section-header">What changed · Aug 2026 rules → Sep 2026</div>
             <div className="px-4 py-3 text-[13px] leading-relaxed">
               <span className="mono text-[var(--accent)]">{rule.id}</span> tightened — synthetic
               product demonstrations now require an on-screen label for the{" "}
               <strong>full duration</strong> of the asset, not the first 3 seconds. Statics
               must carry the label above the fold.
               <div className="mono text-[var(--text-muted)] mt-2">
-                {rule.regulator} {rule.clauseRef} · severity {rule.severity} · draft guideline
+                {rule.regulator} {rule.clauseRef} · {severityLabel[rule.severity].toLowerCase()} · draft guideline
               </div>
             </div>
           </div>

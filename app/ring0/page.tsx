@@ -7,6 +7,7 @@ import { evaluateText } from "@/lib/engine";
 import { VerdictChip } from "@/components/Verdict";
 import { useMounted } from "@/lib/useMounted";
 import { verdictColor } from "@/lib/ui";
+import { RULE_SET_LABEL } from "@/data/rules";
 import type { Market } from "@/lib/types";
 
 // Ring 0 split-screen — PRD §13 acceptance, Flow 2 (§9.5).
@@ -36,20 +37,20 @@ export default function Ring0() {
   return (
     <>
       <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
-        <h1 className="text-[24px] font-semibold">Ring 0 · constrain at generation</h1>
+        <h1 className="text-[24px] font-semibold">Constrain at generation</h1>
         <select value={market} onChange={(e) => setMarket(e.target.value as Market)}
           className="text-[13px] border border-[var(--border)] rounded px-2 py-1.5 bg-[var(--surface)]">
           {MARKETS.map((m) => <option key={m} value={m}>{m}</option>)}
         </select>
       </div>
       <div className="mono text-[var(--text-muted)] mb-6">
-        pramaan.constrain(brand, sku, market, channel) · rule set {pack.ruleSetVersion}
+        the rules go into the generator, not the review queue · {RULE_SET_LABEL}
       </div>
 
       <div data-tour="ring0-split" className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
         {[
-          { title: "Without Ring 0", sub: "generate, then check", copy: UNCONSTRAINED, verdict: before },
-          { title: "With Ring 0", sub: "constraints injected before generation", copy: CONSTRAINED, verdict: after },
+          { title: "Without constraints", sub: "generate, then check", copy: UNCONSTRAINED, verdict: before },
+          { title: "With constraints", sub: "the rules go in before generation", copy: CONSTRAINED, verdict: after },
         ].map((side) => (
           <div key={side.title} className="border border-[var(--border)] rounded bg-[var(--surface)] overflow-hidden">
             <div className="px-4 py-2.5 border-b border-[var(--border)]">
@@ -104,10 +105,11 @@ export default function Ring0() {
       <div className="flex items-start gap-2 text-[13px] text-[var(--text-muted)] leading-relaxed">
         <ArrowRight size={14} className="mt-0.5 shrink-0" />
         <p>
-          As generation goes agentic the caller is increasingly another agent, not a
-          person. Shift-left taken to its end: don&rsquo;t check after generating —
-          constrain generation. Flow 1 still runs afterwards as the backstop, so this
-          replaces no control. Live at <span className="mono">/api/constrain</span>.
+          More and more, the thing asking for 400 variants is another piece of software,
+          not a person. So the cheapest place to stop a bad claim is before it is written:
+          don&rsquo;t check after generating — constrain generating. Normal clearance still
+          runs afterwards as the backstop, so this removes no control. Live at{" "}
+          <span className="mono">/api/constrain</span>.
         </p>
       </div>
     </>

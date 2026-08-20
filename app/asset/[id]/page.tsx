@@ -166,7 +166,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
             <VerdictChip status={status} confidence={verdict.confidence} abstained={verdict.abstained}
               clearedIn={`evaluated in ${verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms`} />
             <span className="mono text-[var(--text-muted)]">
-              {verdict.timings.deterministicMs}ms deterministic · {verdict.timings.judgmentMs}ms judgment
+              {verdict.timings.deterministicMs}ms rule checks · {verdict.timings.judgmentMs}ms AI checks
             </span>
           </div>
 
@@ -192,7 +192,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
               <span>{shown.length ? `${shown.length} finding${shown.length > 1 ? "s" : ""}` : "No findings"}</span>
               {streaming && (
                 <span className="mono normal-case tracking-normal text-[var(--text-muted)]">
-                  judgment checks streaming…
+                  AI checks still running…
                 </span>
               )}
               {shown.length > 0 && (
@@ -226,7 +226,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
             ) : (
               <div className="border border-[var(--border)] rounded bg-[#F0FDF4] px-4 py-3 text-[13px]"
                 style={{ color: "var(--verdict-green)" }}>
-                Cleared against rule set v2026.08. Ship without asking.
+                Cleared under the current rules. Ship without asking.
               </div>
             )}
           </div>
