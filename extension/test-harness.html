@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>PRAMAAN sidebar test harness</title>
+<style>body{font-family:sans-serif;background:#0d0e10;color:#eee;padding:20px;}
+button{margin:4px;padding:6px 12px;}</style>
+</head>
+<body>
+<h2>Sidebar test harness (not part of the extension — dev only)</h2>
+<p>Loads the real content/sidebar.js unmodified. Buttons simulate what docs.js / gmail.js would call after a successful /api/check response.</p>
+<button id="b1">Render 3 findings (mixed severity)</button>
+<button id="b2">Render empty (no findings)</button>
+<button id="b3">Set status text</button>
+
+<script src="content/sidebar.js"></script>
+<script>
+  window.PRAMAAN_SIDEBAR.ensure("Select some text and press Ctrl+C to check it.");
+
+  const sample = [
+    {
+      ruleId: "DOS-EU-4471", clauseRef: "DOS-EU-4471", regulator: "ASCI",
+      severity: "critical", title: "Unsubstantiated 72h claim",
+      quotedText: "clinically proven 72h protection",
+      explanation: "Not registered in this market's substantiation dossier.",
+      fixReplacement: "proven 24h protection",
+    },
+    {
+      ruleId: "CCPA-DP-7", clauseRef: "CCPA-DP-7", regulator: "CCPA",
+      severity: "major", title: "False urgency",
+      quotedText: "only 3 left in stock",
+      explanation: "Inventory claim could not be verified against live stock data.",
+      suggestedFix: "Remove the stock-count claim or verify it dynamically.",
+    },
+    {
+      ruleId: "ASCI-I-2", clauseRef: "ASCI-I-2", regulator: "ASCI",
+      severity: "minor", title: "Ambiguous superiority claim",
+      quotedText: "the best protection you can buy",
+      explanation: "Comparative claim without a named basis of comparison.",
+      altFix: "Consider naming the specific benchmark or dropping the superlative.",
+    },
+  ];
+
+  document.getElementById("b1").onclick = () => {
+    window.PRAMAAN_SIDEBAR.setStatus("Checking… (simulated)");
+    window.PRAMAAN_SIDEBAR.renderFindings(sample, "No findings.");
+  };
+  document.getElementById("b2").onclick = () => {
+    window.PRAMAAN_SIDEBAR.renderFindings([], "No findings in your selection.");
+  };
+  document.getElementById("b3").onclick = () => {
+    window.PRAMAAN_SIDEBAR.setStatus("Watching this document · last checked " + new Date().toLocaleTimeString());
+  };
+</script>
+</body>
+</html>

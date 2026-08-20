@@ -137,3 +137,33 @@ Two demos, both live in the recording/on stage:
       the claim is registered)
 - [ ] No console errors on either host page
 - [ ] Sidebar never shows a raw error to the user, per §6
+
+## 10. Component-level verification done 2026-08-20
+
+The items above need a real, signed-in Google account, which this environment doesn't
+have and shouldn't be given — see `extension/HOW-TO-TEST.md` for the manual steps.
+What could be verified without one:
+
+- `manifest.json` parses as valid JSON and every file it references
+  (`background.js`, `content/sidebar.js`, `content/docs.js`, `content/gmail.js`)
+  exists. One correction to §4 above: there's no separate `sidebar.css` — the
+  sidebar's styles are inlined as a template string inside `content/sidebar.js` and
+  injected into its own shadow root.
+- All four JS files pass `node --check` (syntax only, not a runtime guarantee).
+- `content/sidebar.js` was exercised live in a browser via a throwaway harness
+  (`extension/test-harness.html`, unreferenced by the manifest, doesn't ship) —
+  confirmed: findings render with correct severity-color borders, the card without a
+  literal `fixReplacement`/`suggestedFix` correctly omits the copy button, and
+  **`navigator.clipboard.writeText` genuinely writes to the OS clipboard** from
+  inside the closed shadow root (confirmed by observing a real clipboard change, not
+  just the absence of a thrown error).
+- The live endpoint was curled directly with a known-risky claim
+  (`"...clinically proven 72h protection..."`, market `UK`) and returned a real
+  finding citing `ASCI-I-1` via the deterministic engine — confirming the demo will
+  show findings even if no Gemini key is configured on the deployment; Gemini, where
+  configured, only adds judgment-tier findings on top.
+
+Not yet verified against a real page: the Gmail `aria-label*="Message Body"` selector
+and the Docs `copy`-event trigger. Both are plausible and match current Gmail/Docs
+markup as of general knowledge, but neither vendor guarantees selector stability
+across releases — confirm live before recording.
