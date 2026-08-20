@@ -199,9 +199,9 @@
   <p class="eyebrow">Project NEXT · TechTonic Season 8 · Build report</p>
   <h1>PRAMAAN: what is built, what is not, and what I need from you</h1>
   <p class="standfirst">
-    The prototype engine and all three demos are complete and verified. None of the
-    three graded submission artefacts are finished — two are blocked on a decision only
-    you can make.
+    The prototype engine and all three demos are complete and verified. The AI Studio
+    agent is written, tested and ready to publish as <code>Techtonic_Apex_PRAMAAN</code>.
+    Two graded artefacts remain: the Vercel deployment and the deck.
   </p>
   <div class="meta">
     <span>20 Aug 2026</span>
@@ -238,11 +238,14 @@
     </div>
     <div class="item">
       <span class="item-title">Google AI Studio published agent</span>
-      <span class="chip blocked">blocked</span>
+      <span class="chip pending">ready to paste</span>
       <p class="item-body">
-        The full system prompt is written and generated from the same rule pack the app
-        uses, so the two cannot disagree. It cannot be published because the save name
-        is <code>Techtonic_&lt;TeamName&gt;_PRAMAAN</code> and I do not know the team name.
+        Complete. The system instructions are generated from the same rule pack the app
+        uses, so the two cannot disagree. Six test vectors ship with it, with expected rule
+        ids computed by the engine, plus a script that validates all six against the real
+        model if you have an API key. What remains is the part only a person can do: paste
+        it into AI Studio, save as <code>Techtonic_Apex_PRAMAAN</code>, share, and open the
+        link signed out. About fifteen minutes — see <code>docs/AI-STUDIO-AGENT.md</code>.
       </p>
     </div>
     <div class="item">
@@ -400,11 +403,6 @@
   <h3>Blocked on a decision from you</h3>
   <div class="items">
     <div class="item">
-      <span class="item-title">Publish the AI Studio agent</span>
-      <span class="chip blocked">needs team name</span>
-      <p class="item-body">Prompt is written. Publishing plus the incognito check is about fifteen minutes once the name exists.</p>
-    </div>
-    <div class="item">
       <span class="item-title">Deploy to Vercel</span>
       <span class="chip blocked">needs GitHub access</span>
       <p class="item-body">Grant the Vercel GitHub app access to the repository and I deploy in one call — with auto-deploy on every push thereafter.</p>
@@ -475,13 +473,12 @@
   </p>
 
   <div class="q">
-    <div class="q-head"><span class="q-num">01</span><span class="q-title">What is the team name?</span></div>
+    <div class="q-head"><span class="q-num">01</span><span class="q-title">What is the team name?</span> <span class="chip done">answered</span></div>
     <p>
-      The AI Studio agent saves as <code>Techtonic_&lt;TeamName&gt;_PRAMAAN</code>. This is
-      the single highest-value unblocked item on the list, because the rulebook explicitly
-      demands a published agent and the work is already done.
+      <strong>Apex.</strong> The agent is built and named <code>Techtonic_Apex_PRAMAAN</code>.
+      All that remains is the paste-and-share step in AI Studio, which needs a person
+      signed into the team's Google account.
     </p>
-    <p class="q-default"><strong>No default exists.</strong> I cannot guess a team name.</p>
   </div>
 
   <div class="q">
