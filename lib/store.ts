@@ -52,13 +52,67 @@ export const useApp = create<AppState>((set) => ({
   reset: () => set({ appliedFixes: {}, overrides: {}, ledger: [], persona: "abm" }),
 }));
 
-export const personaLabel: Record<Persona, string> = {
-  abm: "Priya Sharma · ABM",
-  legal: "Legal Counsel",
-  director: "Brand Director",
+/**
+ * Persona capabilities — PRD §11.2 and §3.2.
+ *
+ * §11.2 requires that switching persona changes "visible columns AND available
+ * actions". Gating only the actions implements half the spec, so each persona also
+ * declares the columns its role actually needs:
+ *
+ *   ABM        ships cleared work and applies fixes. No override authority.
+ *   Legal      absolute veto, and the only role that reviews the routing queue.
+ *              Does not ship — PRAMAAN clears, publication is a separate act (§14.2).
+ *   Director   signs off by consequence, so sees exposure (reach and spend), and is
+ *              the role that owns routing thresholds (§3.2).
+ */
+export interface PersonaSpec {
+  label: string;
+  role: string;
+  /** Name written to the append-only ledger when this persona acts. */
+  approver: string;
+  canOverride: boolean;
+  canShip: boolean;
+  canSetRouting: boolean;
+  /** Extra Inbox columns beyond the base set. */
+  columns: ("routing" | "severity" | "reach" | "spend")[];
+}
+
+export const PERSONAS: Record<Persona, PersonaSpec> = {
+  abm: {
+    label: "Priya Sharma · ABM",
+    role: "Assistant Brand Manager, Personal Care",
+    approver: "Priya Sharma · ABM",
+    canOverride: false,
+    canShip: true,
+    canSetRouting: false,
+    columns: [],
+  },
+  legal: {
+    label: "Legal Counsel",
+    role: "Legal & Regulatory — absolute veto",
+    approver: "Legal Counsel",
+    canOverride: true,
+    // Legal clears; it does not publish. PRAMAAN never publishes (§14.2).
+    canShip: false,
+    canSetRouting: false,
+    columns: ["routing", "severity"],
+  },
+  director: {
+    label: "Brand Director",
+    role: "Brand Director — signs off by consequence",
+    approver: "Brand Director",
+    canOverride: true,
+    canShip: true,
+    canSetRouting: true,
+    columns: ["reach", "spend"],
+  },
 };
 
-/** Legal sees Override; the ABM does not. A 20-minute build that shows the
- *  governance model better than a slide (PRD §11.2). */
-export const canOverride = (p: Persona) => p === "legal" || p === "director";
-export const canShip = (p: Persona) => p === "abm" || p === "director";
+export const personaLabel: Record<Persona, string> =
+  Object.fromEntries(
+    (Object.keys(PERSONAS) as Persona[]).map((p) => [p, PERSONAS[p].label]),
+  ) as Record<Persona, string>;
+
+export const canOverride = (p: Persona) => PERSONAS[p].canOverride;
+export const canShip = (p: Persona) => PERSONAS[p].canShip;
+export const approverName = (p: Persona) => PERSONAS[p].approver;

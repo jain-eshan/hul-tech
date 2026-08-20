@@ -13,7 +13,37 @@ One line per phase. This is the handoff if a session or usage limit resets mid-b
 | 5 · Moment Risk + Live Check | 20 Aug 08:30 IST | **done** | Refusal is a labelled composite; Live Check falls back silently |
 | 9 · Freeze, deploy, record, slides | — | next | never cut |
 
-**Cut for now** (revisit only if budget allows): WATCH crawl, PULSE, MEMORY, accuracy card.
+| 6 · T0 completion | 20 Aug 10:30 IST | **done** | Ring 0, accuracy card, evidence snapshot, creator sweep |
+| 7 · Spec details | 20 Aug 10:30 IST | **done** | Keyboard map, bounding boxes, progressive disclosure |
+
+**Still cut**: PULSE (portfolio exposure), MEMORY (precedent search), marketplace monitoring.
+WATCH now exists as Creator Sweep with a real capture pipeline over local fixtures.
+
+## Persona audit (PRD §11.2, §3.2)
+
+Four defects found and fixed:
+
+| # | Defect | Fix |
+|---|---|---|
+| 1 | **Brand Director's actions were logged as the ABM** in the append-only ledger | Each persona declares its own approver name. An audit trail naming the wrong approver is worse than none |
+| 2 | `canShip` was defined but never called — Ship was enabled for every persona | Ship is gated. Legal clears; it does not publish (§14.2) |
+| 3 | §11.2 requires switching to change "visible columns AND available actions" — only actions changed | Legal sees routing and severity; Director sees reach and spend |
+| 4 | Brand Director was a functional clone of Legal, with none of §3.2's distinct capabilities | Director owns routing thresholds and the exposure columns |
+
+## Accuracy card — measured, with its limits stated
+
+precision 1.00 · recall 1.00 · high-severity recall 1.00 · false-positive rate 0% over 30 cases.
+
+Writing the labels **before** measuring found three real engine defects:
+
+| Defect | Consequence had it shipped |
+|---|---|
+| `\d{4,}` did not match across a thousands separator | "23,800 strands" — the exact pattern ASCI named in FY25-26 — evaded the manufactured-precision test |
+| Price and offer phrases were resolved against the product claims ledger | "only 3 left" reported as an unsubstantiated product claim on top of the correct dark-pattern finding |
+| Free-text extraction defaulted unknown phrases to "tagline" | Retired claims like "Fairness guaranteed" were treated as non-objective and never checked at all |
+
+One **label** was also wrong and is corrected in place with the reasoning recorded, because
+silently retuning labels to match an engine is how an accuracy card becomes worthless.
 
 ## Acceptance (`node scripts/acceptance.mjs`, real browser)
 

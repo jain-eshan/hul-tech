@@ -70,6 +70,8 @@ export function absoluteQuantifier(text: string): TestResult {
 export function manufacturedPrecision(text: string): TestResult {
   const spans = [
     ...spansFor(text, /\b\d+\.\d+\s*x\b/i),
+    // Allow thousands separators: "23,800 strands" is the exact pattern ASCI named.
+    ...spansFor(text, /\b\d{1,3}(,\d{3})+\s*(strands|hairs|cells|follicles)\b/i),
     ...spansFor(text, /\b\d{4,}\s*(strands|hairs|cells|follicles)\b/i),
     ...spansFor(text, /\b(?!100\s*%)\d{3,}\s*%/),
   ].sort((a, b) => a.start - b.start);

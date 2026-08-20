@@ -97,11 +97,18 @@ export const rexonaVariants: Asset[] = [
   // AMBER — the claim is real, the market registration is not.
   mk({ ...REX, id: "REX-10", market: "UK", language: "English", format: "reel",
     copy: "Clinically proven 72h protection. It won't ever let you down.",
-    extracted: [ex("Clinically proven 72h protection"), ex("It won't ever let you down", "tagline", "body")],
+    extracted: [
+      // bbox is a fraction of the frame, so the overlay scales with the preview.
+      ex("Clinically proven 72h protection", "performance", "on_pack", { bbox: { x: 0.07, y: 0.63, w: 0.62, h: 0.13 } }),
+      ex("It won't ever let you down", "tagline", "body"),
+    ],
     reachEstimate: 380_000, spend: 1_900_000 }),
   mk({ ...REX, id: "REX-11", market: "DE", language: "German", format: "reel",
     copy: "Klinisch bewiesener 72-Stunden-Schutz. Lässt dich nie im Stich.",
-    extracted: [ex("Clinically proven 72h protection"), ex("It won't ever let you down", "tagline", "body")],
+    extracted: [
+      ex("Clinically proven 72h protection", "performance", "on_pack", { bbox: { x: 0.07, y: 0.63, w: 0.66, h: 0.13 } }),
+      ex("It won't ever let you down", "tagline", "body"),
+    ],
     reachEstimate: 410_000, spend: 2_100_000 }),
 
   // RED — unenrolled human likeness. High-risk AI tier: a label does not cure it.

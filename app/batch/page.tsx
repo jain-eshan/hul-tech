@@ -8,6 +8,7 @@ import { evaluate } from "@/lib/engine";
 import { RULE_SET_VERSION } from "@/data/rules";
 import { verdictColor, verdictBg, cx } from "@/lib/ui";
 import { useMounted } from "@/lib/useMounted";
+import { useApp, canShip, PERSONAS } from "@/lib/store";
 import type { VerdictStatus } from "@/lib/types";
 
 // PRD §11.5 — the market strip. Twelve markets, twelve verdicts, twelve clauses.
@@ -21,6 +22,7 @@ const RESOLVE_MS = 4000;
 
 export default function BatchReview() {
   const mounted = useMounted();
+  const { persona } = useApp();
   const results = useMemo(
     () => rexonaVariants.map((a) => ({ asset: a, verdict: evaluate(a) })),
     [],
@@ -125,8 +127,11 @@ export default function BatchReview() {
             ))}
           </div>
 
-          <div className="flex gap-2">
-            <button className="text-[13px] px-3 py-1.5 rounded bg-[var(--accent)] text-white">
+          <div className="flex gap-2 items-center">
+            <button
+              disabled={!canShip(persona)}
+              title={canShip(persona) ? undefined : "Legal clears assets. Publication is initiated by the brand team."}
+              className="text-[13px] px-3 py-1.5 rounded bg-[var(--accent)] text-white disabled:opacity-35 disabled:cursor-not-allowed">
               Ship {count("GREEN")} cleared
             </button>
             <Link href={`/asset/${flagged.find((f) => f.verdict.status === "AMBER")?.asset.id ?? ""}`}
@@ -137,6 +142,9 @@ export default function BatchReview() {
               className="text-[13px] px-3 py-1.5 rounded border border-[var(--border)] hover:bg-[var(--bg)]">
               Regenerate {count("RED")}
             </Link>
+            <span className="text-[12px] text-[var(--text-muted)] ml-2">
+              Signed in as {PERSONAS[persona].role}
+            </span>
           </div>
         </>
       )}

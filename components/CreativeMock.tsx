@@ -1,6 +1,7 @@
 "use client";
 
-import type { Asset } from "@/lib/types";
+import type { Asset, Finding } from "@/lib/types";
+import { severityColor } from "@/lib/ui";
 import { Play } from "lucide-react";
 
 // Believable creative, built entirely in CSS — no third-party logo files, no stock
@@ -23,7 +24,15 @@ const PALETTE: Record<string, { from: string; to: string; ink: string }> = {
   Kissan:      { from: "#7A1F1F", to: "#C64B2C", ink: "#FFFFFF" },
 };
 
-export default function CreativeMock({ asset, copy }: { asset: Asset; copy: string }) {
+export default function CreativeMock({
+  asset, copy, findings = [], activeRule,
+}: {
+  asset: Asset;
+  copy: string;
+  /** Findings whose extracted claim carries a bbox get drawn on the frame. */
+  findings?: Finding[];
+  activeRule?: string;
+}) {
   const p = PALETTE[asset.brand] ?? { from: "#1E3A8A", to: "#3B6BC4", ink: "#FFFFFF" };
   const isVideo = asset.format === "video" || asset.format === "reel";
   const headline = copy.split(/(?<=[.!?])\s+/)[0] ?? copy;
@@ -57,6 +66,30 @@ export default function CreativeMock({ asset, copy }: { asset: Asset; copy: stri
           <div className="text-[26px] font-semibold leading-[1.15] mb-2">{headline}</div>
           {sub && <div className="text-[14px]" style={{ opacity: 0.85 }}>{sub}</div>}
         </div>
+
+        {/* Overlay the offending region. An asset-level score is unactionable; a box
+            around the exact on-pack claim is what makes it fixable. */}
+        {findings.map((f) => {
+          const src = asset.extracted.find((e) => e.claimText === f.quotedText && e.bbox);
+          if (!src?.bbox) return null;
+          const active = activeRule === f.ruleId;
+          return (
+            <div key={f.ruleId} className="absolute pointer-events-none transition-opacity"
+              style={{
+                left: `${src.bbox.x * 100}%`, top: `${src.bbox.y * 100}%`,
+                width: `${src.bbox.w * 100}%`, height: `${src.bbox.h * 100}%`,
+                border: `2px solid ${severityColor[f.severity]}`,
+                borderRadius: 3,
+                boxShadow: active ? `0 0 0 3px ${severityColor[f.severity]}33` : undefined,
+                opacity: active ? 1 : 0.75,
+              }}>
+              <span className="absolute -top-[18px] left-0 mono px-1 rounded"
+                style={{ background: severityColor[f.severity], color: "#fff", fontSize: 10 }}>
+                {f.ruleId}
+              </span>
+            </div>
+          );
+        })}
 
         {isVideo && (
           <div className="absolute inset-0 flex items-center justify-center">

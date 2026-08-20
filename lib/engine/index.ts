@@ -97,13 +97,31 @@ export interface LedgerMatch {
 }
 
 export function matchClaim(extracted: ExtractedClaim, market: Market, sku: string): LedgerMatch {
-  if (extracted.claimType === "tagline") return { confidence: 1, outcome: "not_objective" };
+  // Taglines are non-objective by definition. Price and offer phrases are objective
+  // but are governed by the offer rules (CCPA-MA-5/6, CCPA-DP-7), not by a product
+  // substantiation dossier — resolving them against the claims ledger produced a
+  // spurious unsubstantiated-claim finding on top of the correct one.
+  if (extracted.claimType === "tagline" || extracted.claimType === "price_offer") {
+    return { confidence: 1, outcome: "not_objective" };
+  }
 
   const target = normalise(extracted.claimText);
   let best: ApprovedClaim | undefined;
   let bestScore = 0;
   for (const c of ledger) {
-    const s = score(target, normalise(c.canonicalText));
+    const canonical = normalise(c.canonicalText);
+    let s = score(target, canonical);
+
+    // Containment. A claim is frequently embedded in a longer sentence — "dermatologist
+    // tested and it has the 1/4 moisturising cream, which is the only reason my winter
+    // skin survives" carries two approved claims inside one sentence of narrative.
+    // Whole-string similarity scores that near zero and reports the approved claim as
+    // unsubstantiated. Extraction is supposed to pull the claim phrase out of the
+    // sentence, so the matcher recognises the phrase wherever it sits.
+    if (canonical.split(" ").length >= 2 && target.includes(canonical)) {
+      s = Math.max(s, 0.95);
+    }
+
     // Prefer the same SKU when two claims score equally.
     const adjusted = c.productSku === sku ? s + 0.01 : s;
     if (adjusted > bestScore) { bestScore = adjusted; best = c; }
@@ -397,8 +415,10 @@ export function evaluateText(
     if (/\b(no\.?\s?1|#1|best|leading|better than|vs\b)/.test(l)) return "comparative";
     if (/\b(free|off|only \d|price|₹|discount)/.test(l)) return "price_offer";
     if (/\b(recommended by|users? say|reviewed)/.test(l)) return "testimonial";
-    if (/\b\d/.test(l)) return "performance";
-    return "tagline";
+    // Default to objective, not to tagline. An unrecognised phrase treated as a
+    // tagline is never checked at all; treated as a performance claim it is checked
+    // and clears if the ledger holds it. The failure modes are not symmetric.
+    return "performance";
   };
 
   const asset: Asset = {

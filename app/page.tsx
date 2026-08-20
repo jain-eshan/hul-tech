@@ -5,8 +5,9 @@ import Link from "next/link";
 import { assets } from "@/data/assets";
 import { evaluate } from "@/lib/engine";
 import { VerdictDot, StatCard } from "@/components/Verdict";
-import { fmtReach, cx } from "@/lib/ui";
+import { fmtReach, cx, severityColor } from "@/lib/ui";
 import { useMounted } from "@/lib/useMounted";
+import { useApp, PERSONAS } from "@/lib/store";
 import { SkeletonRows } from "@/components/Skeleton";
 import type { VerdictStatus } from "@/lib/types";
 
@@ -16,6 +17,8 @@ import type { VerdictStatus } from "@/lib/types";
 
 export default function Inbox() {
   const mounted = useMounted();
+  const { persona } = useApp();
+  const cols = PERSONAS[persona].columns;
   const rows = useMemo(
     () => assets.map((a) => ({ asset: a, verdict: evaluate(a) })),
     [],
@@ -89,9 +92,16 @@ export default function Inbox() {
         <table className="w-full text-[13px]">
           <thead>
             <tr className="border-b border-[var(--border)] text-left">
-              {["", "Brand", "Campaign", "Format", "Market", "Findings", "Reach", "Engine"].map((h) => (
+              {["", "Brand", "Campaign", "Format", "Market", "Findings"].map((h) => (
                 <th key={h} className="section-header font-semibold px-3 py-2">{h}</th>
               ))}
+              {/* Columns follow the role. Legal reviews the routing queue; the
+                  director signs off by consequence, so sees exposure. */}
+              {cols.includes("severity") && <th className="section-header font-semibold px-3 py-2">Top severity</th>}
+              {cols.includes("routing") && <th className="section-header font-semibold px-3 py-2">Routing</th>}
+              {cols.includes("reach") && <th className="section-header font-semibold px-3 py-2">Reach</th>}
+              {cols.includes("spend") && <th className="section-header font-semibold px-3 py-2">Spend</th>}
+              <th className="section-header font-semibold px-3 py-2">Engine</th>
             </tr>
           </thead>
           <tbody>
@@ -107,7 +117,20 @@ export default function Inbox() {
                 <td className={cx("px-3 py-2.5 mono", verdict.findings.length > 0 && "font-semibold")}>
                   {verdict.findings.length || "—"}
                 </td>
-                <td className="px-3 py-2.5 mono text-[var(--text-muted)]">{fmtReach(asset.reachEstimate)}</td>
+                {cols.includes("severity") && (
+                  <td className="px-3 py-2.5 mono" style={{ color: verdict.findings.length ? severityColor[verdict.findings[0].severity] : undefined }}>
+                    {verdict.findings[0]?.severity ?? "—"}
+                  </td>
+                )}
+                {cols.includes("routing") && (
+                  <td className="px-3 py-2.5 mono text-[var(--text-muted)]">{verdict.routing}</td>
+                )}
+                {cols.includes("reach") && (
+                  <td className="px-3 py-2.5 mono text-[var(--text-muted)]">{fmtReach(asset.reachEstimate)}</td>
+                )}
+                {cols.includes("spend") && (
+                  <td className="px-3 py-2.5 mono text-[var(--text-muted)]">₹{(asset.spend / 100000).toFixed(1)}L</td>
+                )}
                 <td className="px-3 py-2.5 mono text-[var(--text-muted)]">
                   {verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms
                 </td>

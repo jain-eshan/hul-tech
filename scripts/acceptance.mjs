@@ -38,7 +38,8 @@ check("Batch Review animates 12 chips to 9/2/1 in under 5s",
   /9\s*cleared/.test(batch) && /2\s*needs edit/.test(batch) && /1\s*blocked/.test(batch));
 
 await page.goto(`${BASE}/asset/REX-10`, { waitUntil: "load" });
-await page.waitForTimeout(500);
+// Judgment findings stream in behind the deterministic ones, so wait past the reveal.
+await page.waitForTimeout(3000);
 check("Findings carry a clause reference", (await text()).includes("asci-i-1"));
 await page.click("button:has-text('Apply')");
 await page.waitForTimeout(800);
@@ -100,11 +101,100 @@ const live = await text();
 check("Live Check returns a result and never shows an error",
   live.includes("ccpa-100") && !/error|failed|something went wrong/.test(live));
 
+// ── T0 features added after the first pass ────────────────────────────────
+await page.click("aside >> text=Ring 0");
+await page.waitForTimeout(600);
+const ring = await text();
+check("Ring 0 split-screen renders the constraint pack",
+  ring.includes("without ring 0") && ring.includes("with ring 0") && ring.includes("permitted"));
+await page.click("text=Constraint pack for");
+await page.waitForTimeout(300);
+check("Constraint pack expands to the injected prompt",
+  (await text()).includes("permitted claims"));
+
+const api = await page.evaluate(async () => {
+  const r = await fetch("/api/constrain?brand=Rexona&sku=REX-AP-150&market=IN");
+  const j = await r.json();
+  return { claims: j.pack.permittedClaims.length, prohibited: j.pack.prohibitedTerms.length };
+});
+check("pramaan.constrain() endpoint returns a pack", api.claims > 0 && api.prohibited > 0,
+  `${api.claims} permitted, ${api.prohibited} prohibited`);
+
+await page.click("aside >> text=Accuracy Card");
+await page.waitForTimeout(700);
+const acc = await text();
+check("Accuracy card shows measured numbers",
+  /recall/.test(acc) && /precision/.test(acc) && /%/.test(acc));
+check("Accuracy card states its own limits",
+  acc.includes("what this card does not say") && acc.includes("not adjudicated by regulatory counsel"));
+
+await page.click("aside >> text=Creator Sweep");
+await page.waitForTimeout(700);
+const sweep = await text();
+check("Creator sweep shows 3 violations", (sweep.match(/send fix request/g) ?? []).length === 3);
+await page.locator("button:has-text('Send fix request')").first().click();
+await page.waitForTimeout(400);
+check("Fix request is plain language, not a clause citation",
+  (await text("body")).includes("thanks for the"));
+await page.locator("body").click({ position: { x: 5, y: 5 } });
+await page.waitForTimeout(300);
+
+await page.locator("button.mono").filter({ hasText: "sha256" }).first().click();
+await page.waitForTimeout(600);
+const snapText = await text("body");
+check("Snapshot modal shows a real captured render with timestamp and hash",
+  snapText.includes("sha256-") && snapText.includes("captured at") && snapText.includes("gmt"));
+const imgOk = await page.locator('img[alt*="Captured render"]').first()
+  .evaluate((el) => el.naturalWidth > 0).catch(() => false);
+check("Snapshot PNG actually loads", imgOk === true);
+await page.locator("body").click({ position: { x: 5, y: 5 } });
+await page.waitForTimeout(300);
+
+// ── Spec details ──────────────────────────────────────────────────────────
+await page.goto(`${BASE}/asset/REX-10`, { waitUntil: "load" });
+await page.waitForTimeout(300);
+const early = await page.locator("main").innerText();
+await page.waitForTimeout(2600);
+const late = await page.locator("main").innerText();
+check("Progressive disclosure — findings are not all present at once",
+  early.length < late.length || early.includes("streaming"));
+check("Bounding box is drawn on the offending region",
+  (await page.locator('text=ASCI-I-1').count()) > 0 &&
+  (await page.locator('div[style*="border: 2px solid"]').count()) > 0);
+await page.keyboard.press("a");
+await page.waitForTimeout(800);
+check("Keyboard: 'a' applies the active fix",
+  (await text()).includes("cleared against rule set"));
+
+// ── Personas ──────────────────────────────────────────────────────────────
+await page.goto(`${BASE}/`, { waitUntil: "load" });
+await page.waitForTimeout(600);
+const abmCols = await page.locator("thead th").allInnerTexts();
+await page.selectOption("aside select", "legal");
+await page.waitForTimeout(500);
+const legalCols = await page.locator("thead th").allInnerTexts();
+await page.selectOption("aside select", "director");
+await page.waitForTimeout(500);
+const dirCols = await page.locator("thead th").allInnerTexts();
+check("Persona changes visible columns — ABM baseline", !abmCols.join().toLowerCase().includes("routing"));
+check("Persona changes visible columns — Legal sees routing",
+  legalCols.join().toLowerCase().includes("routing") && legalCols.length > abmCols.length);
+check("Persona changes visible columns — Director sees exposure",
+  dirCols.join().toLowerCase().includes("reach") && dirCols.join().toLowerCase().includes("spend"));
+
+await page.click("aside >> text=Batch Review");
+await page.waitForTimeout(400);
+await page.click("text=Run clearance");
+await page.waitForTimeout(4600);
+check("Director can ship", !(await page.locator("button:has-text('Ship')").isDisabled()));
+await page.selectOption("aside select", "legal");
+await page.waitForTimeout(500);
+check("Legal clears but does not publish", await page.locator("button:has-text('Ship')").isDisabled());
+
 // ── Integrity ──────────────────────────────────────────────────────────────
-check("Draft-status rules are visibly labelled", (await page.goto(`${BASE}/asset/REX-12`, { waitUntil: "load" }).then(async () => {
-  await page.waitForTimeout(500);
-  return await text();
-})).includes("draft"));
+await page.goto(`${BASE}/asset/REX-12`, { waitUntil: "load" });
+await page.waitForTimeout(3000);
+check("Draft-status rules are visibly labelled", (await text()).includes("draft"));
 
 check("No uncaught page errors across the walkthrough", errors.length === 0, errors.slice(0, 2).join("; "));
 

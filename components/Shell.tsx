@@ -16,16 +16,26 @@ const NAV: { group: string; items: { href: string; label: string }[] }[] = [
     { href: "/", label: "Inbox" },
     { href: "/batch", label: "Batch Review" },
     { href: "/moment", label: "Moment Risk" },
+    { href: "/ring0", label: "Ring 0" },
+  ]},
+  { group: "WATCH", items: [
+    { href: "/watch", label: "Creator Sweep" },
   ]},
   { group: "LEDGER", items: [
     { href: "/audit", label: "Audit Trail" },
     { href: "/replay", label: "Rule Replay" },
+    { href: "/accuracy", label: "Accuracy Card" },
   ]},
 ];
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const { persona, setPersona, reset } = useApp();
+
+  // Fixture pages render bare. They exist to be captured by the snapshot pipeline as
+  // if they were third-party pages, and a captured "creator post" wrapped in this
+  // product's own navigation is evidence of the wrong thing entirely.
+  if (path?.startsWith("/fixtures")) return <>{children}</>;
 
   return (
     <div className="flex min-h-screen">

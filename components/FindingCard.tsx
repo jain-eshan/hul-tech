@@ -5,7 +5,7 @@ import { ExternalLink, Check, X, FileText } from "lucide-react";
 import type { Finding } from "@/lib/types";
 import { SeverityTag } from "./Verdict";
 import { severityColor } from "@/lib/ui";
-import { useApp, canOverride } from "@/lib/store";
+import { useApp, canOverride, approverName } from "@/lib/store";
 
 // PRD §11.4. Four things do the work here and all four survive the build:
 //   1. the underline is on the claim, not the asset
@@ -33,7 +33,7 @@ export default function FindingCard({
     override(key, reason.trim());
     appendLedger({
       assetId, ruleSetVersion: "v2026.08", status: "OVERRIDDEN",
-      findings: 1, approver: persona === "legal" ? "Legal Counsel" : "Priya Sharma · ABM",
+      findings: 1, approver: approverName(persona),
       action: `Override — ${finding.ruleId}`, reasoning: reason.trim(),
     });
     setJustifying(false);
