@@ -71,6 +71,9 @@ for (const post of creatorPosts) {
     capturedAt,
     expandedRegions: expanded,
     bytes: png.length,
+    // Readable excerpt, so the captured markup can be inspected in place rather than
+    // only linked to. The hash above is over the FULL DOM, not this excerpt.
+    domExcerpt: dom.replace(/\s+/g, " ").trim().slice(0, 1800),
   });
 
   console.log(`captured ${post.id}  ${sha256(png)}  ${(png.length / 1024).toFixed(0)}KB  expanded=${expanded}`);
@@ -96,6 +99,7 @@ export interface Snapshot {
   capturedAt: string;
   expandedRegions: number;
   bytes: number;
+  domExcerpt: string;
 }
 
 export const snapshots: Snapshot[] = ${JSON.stringify(observations, null, 2)};

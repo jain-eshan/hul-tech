@@ -14,79 +14,86 @@ export interface Snapshot {
   capturedAt: string;
   expandedRegions: number;
   bytes: number;
+  domExcerpt: string;
 }
 
 export const snapshots: Snapshot[] = [
   {
     "id": "OBS-CR-01",
     "postId": "CR-01",
-    "url": "http://localhost:3192/fixtures/post/CR-01",
+    "url": "http://localhost:3211/fixtures/post/CR-01",
     "pngRef": "/snapshots/CR-01.png",
     "domRef": "/snapshots/CR-01.html",
     "pngHash": "sha256-c636424b52106f198bb66bf755e4b001",
-    "domHash": "sha256-aa743d4759ae58f828acae185dd065ad",
-    "capturedAt": "2026-08-20T00:13:45.443Z",
+    "domHash": "sha256-96022ba484221b828e21ec80b64ef1b7",
+    "capturedAt": "2026-08-20T00:20:09.545Z",
     "expandedRegions": 1,
-    "bytes": 20321
+    "bytes": 20321,
+    "domExcerpt": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1787185208272\" data-precedence=\"next_static/css/app/layout.css\"><title>@glowwithria on Instagram</title><meta name=\"description\" content=\"Proof at the speed of publish.\"></head><body><div style=\"background:#fff;min-height:100vh;padding:24px;font-family:Inter, system-ui, sans-serif\"><div data-post-card=\"true\" style=\"max-width:470px;margin:0 auto;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden\"><div style=\"display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #efefef\"><div style=\"width:32px;height:32px;border-radius:50%;background:#dc2743\"></div><div><div style=\"font-size:13px;font-weight:600\">@glowwithria</div><div style=\"font-size:11px;color:#8e8e8e\">412K<!-- --> followers · <!-- -->Instagram</div></div></div><div style=\"aspect-ratio:1/1;background:#ded7cc;display:flex;align-items:flex-end;padding:18px\"><div style=\"font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#5c5346;font-weight:600\">Lakmé</div></div><div style=\"padding:12px 14px;font-size:13px;line-height:1.5\"><span style=\"font-weight:600\">@glowwithria</span> <span>obsessed with this foundation!! 16 hours and it did not budge through a full shoot day. shade 04 is my match. linking below x</span><span style=\"color:#8e8e8e\">… more</span><span data-collapsed=\"true\" style=\"display: inline;\">x</span><div style=\"font-size:11px;color:#8e8e8e;margin-top:8px\">Mon, 17 Aug 2026 09:14:00 GMT</div></div></div></div><next-route-announcer style=\"position: absolute;\"></next-route-announcer></body></html>"
   },
   {
     "id": "OBS-CR-02",
     "postId": "CR-02",
-    "url": "http://localhost:3192/fixtures/post/CR-02",
+    "url": "http://localhost:3211/fixtures/post/CR-02",
     "pngRef": "/snapshots/CR-02.png",
     "domRef": "/snapshots/CR-02.html",
     "pngHash": "sha256-700b7d244c10b5e5f331dad94c9e132e",
-    "domHash": "sha256-acc5f136565eba3c4ed09dd9be1bf106",
-    "capturedAt": "2026-08-20T00:13:45.625Z",
+    "domHash": "sha256-310bd10760d98bc11955313cc4c905ad",
+    "capturedAt": "2026-08-20T00:20:10.418Z",
     "expandedRegions": 1,
-    "bytes": 24759
+    "bytes": 24759,
+    "domExcerpt": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1787185209580\" data-precedence=\"next_static/css/app/layout.css\"><title>@fitfam.arjun on Instagram</title><meta name=\"description\" content=\"Proof at the speed of publish.\"></head><body><div style=\"background:#fff;min-height:100vh;padding:24px;font-family:Inter, system-ui, sans-serif\"><div data-post-card=\"true\" style=\"max-width:470px;margin:0 auto;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden\"><div style=\"display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #efefef\"><div style=\"width:32px;height:32px;border-radius:50%;background:#dc2743\"></div><div><div style=\"font-size:13px;font-weight:600\">@fitfam.arjun</div><div style=\"font-size:11px;color:#8e8e8e\">1.1M<!-- --> followers · <!-- -->Instagram</div></div></div><div style=\"aspect-ratio:1/1;background:#ded7cc;display:flex;align-items:flex-end;padding:18px\"><div style=\"font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#5c5346;font-weight:600\">Lifebuoy</div></div><div style=\"padding:12px 14px;font-size:13px;line-height:1.5\"><span style=\"font-weight:600\">@fitfam.arjun</span> <span>post-session routine is non negotiable. gym floors are filthy and I am not bringing that home to my kid. this one removes 99.</span><span style=\"color:#8e8e8e\">… more</span><span data-collapsed=\"true\" style=\"display: inline;\">9% of germs which is all I need to know honestly. been using it for years now, way before any of this. #ad</span><div style=\"font-size:11px;color:#8e8e8e;margin-top:8px\">Tue, 18 Aug 2026 06:02:00 GMT</div></div></div></div><next-route-announcer style=\"position: absolute;\"></next-ro"
   },
   {
     "id": "OBS-CR-03",
     "postId": "CR-03",
-    "url": "http://localhost:3192/fixtures/post/CR-03",
+    "url": "http://localhost:3211/fixtures/post/CR-03",
     "pngRef": "/snapshots/CR-03.png",
     "domRef": "/snapshots/CR-03.html",
     "pngHash": "sha256-9a8b995ebbb7e0f22bab544cd50a2592",
-    "domHash": "sha256-9cd27fb6b86284164fc9d9e7f28539cb",
-    "capturedAt": "2026-08-20T00:13:45.791Z",
+    "domHash": "sha256-306ae10898a565b30a411c0caae8e45b",
+    "capturedAt": "2026-08-20T00:20:11.290Z",
     "expandedRegions": 0,
-    "bytes": 19507
+    "bytes": 19507,
+    "domExcerpt": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1787185210444\" data-precedence=\"next_static/css/app/layout.css\"><title>@meera.skincare on Instagram</title><meta name=\"description\" content=\"Proof at the speed of publish.\"></head><body><div style=\"background:#fff;min-height:100vh;padding:24px;font-family:Inter, system-ui, sans-serif\"><div data-post-card=\"true\" style=\"max-width:470px;margin:0 auto;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden\"><div style=\"display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #efefef\"><div style=\"width:32px;height:32px;border-radius:50%;background:#dc2743\"></div><div><div style=\"font-size:13px;font-weight:600\">@meera.skincare</div><div style=\"font-size:11px;color:#8e8e8e\">228K<!-- --> followers · <!-- -->Instagram</div></div></div><div style=\"aspect-ratio:1/1;background:#ded7cc;display:flex;align-items:flex-end;padding:18px\"><div style=\"font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#5c5346;font-weight:600\">Pond's</div></div><div style=\"padding:12px 14px;font-size:13px;line-height:1.5\"><span style=\"font-weight:600\">@meera.skincare</span> <span>#ad this cream literally cures acne, my derm was shocked. 100% natural too. only 3 left on the site, hurry!!</span><div style=\"font-size:11px;color:#8e8e8e;margin-top:8px\">Tue, 18 Aug 2026 14:40:00 GMT</div></div></div></div><next-route-announcer style=\"position: absolute;\"></next-route-announcer></body></html>"
   },
   {
     "id": "OBS-CR-04",
     "postId": "CR-04",
-    "url": "http://localhost:3192/fixtures/post/CR-04",
+    "url": "http://localhost:3211/fixtures/post/CR-04",
     "pngRef": "/snapshots/CR-04.png",
     "domRef": "/snapshots/CR-04.html",
     "pngHash": "sha256-cb47e71221b44908348c98c7256a0d76",
-    "domHash": "sha256-c2a7efeec91f4436054cc2f4db62cd63",
-    "capturedAt": "2026-08-20T00:13:45.956Z",
+    "domHash": "sha256-84f521d2cdfd6213f0670851c9ae10c8",
+    "capturedAt": "2026-08-20T00:20:12.053Z",
     "expandedRegions": 1,
-    "bytes": 20111
+    "bytes": 20111,
+    "domExcerpt": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1787185211319\" data-precedence=\"next_static/css/app/layout.css\"><title>@kavya.styles on Instagram</title><meta name=\"description\" content=\"Proof at the speed of publish.\"></head><body><div style=\"background:#fff;min-height:100vh;padding:24px;font-family:Inter, system-ui, sans-serif\"><div data-post-card=\"true\" style=\"max-width:470px;margin:0 auto;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden\"><div style=\"display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #efefef\"><div style=\"width:32px;height:32px;border-radius:50%;background:#dc2743\"></div><div><div style=\"font-size:13px;font-weight:600\">@kavya.styles</div><div style=\"font-size:11px;color:#8e8e8e\">89K<!-- --> followers · <!-- -->Instagram</div></div></div><div style=\"aspect-ratio:1/1;background:#ded7cc;display:flex;align-items:flex-end;padding:18px\"><div style=\"font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#5c5346;font-weight:600\">Dove</div></div><div style=\"padding:12px 14px;font-size:13px;line-height:1.5\"><span style=\"font-weight:600\">@kavya.styles</span> <span>#ad soft skin szn. dermatologist tested and it has the 1/4 moisturising cream, which is the only reason my winter skin surviv</span><span style=\"color:#8e8e8e\">… more</span><span data-collapsed=\"true\" style=\"display: inline;\">es.</span><div style=\"font-size:11px;color:#8e8e8e;margin-top:8px\">Sun, 16 Aug 2026 11:20:00 GMT</div></div></div></div><next-route-announcer style=\"position: absolute;\"></next-route-announcer></body></html>"
   },
   {
     "id": "OBS-CR-05",
     "postId": "CR-05",
-    "url": "http://localhost:3192/fixtures/post/CR-05",
+    "url": "http://localhost:3211/fixtures/post/CR-05",
     "pngRef": "/snapshots/CR-05.png",
     "domRef": "/snapshots/CR-05.html",
     "pngHash": "sha256-8bde51b6ac75ff67eb889523b91362d0",
-    "domHash": "sha256-db52e8798025815b671e8201c942ee2d",
-    "capturedAt": "2026-08-20T00:13:46.124Z",
+    "domHash": "sha256-d67c694220f2b40171c27dae702c2c5c",
+    "capturedAt": "2026-08-20T00:20:12.980Z",
     "expandedRegions": 0,
-    "bytes": 20169
+    "bytes": 20169,
+    "domExcerpt": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1787185212088\" data-precedence=\"next_static/css/app/layout.css\"><title>@thehomechef on YouTube</title><meta name=\"description\" content=\"Proof at the speed of publish.\"></head><body><div style=\"background:#fff;min-height:100vh;padding:24px;font-family:Inter, system-ui, sans-serif\"><div data-post-card=\"true\" style=\"max-width:470px;margin:0 auto;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden\"><div style=\"display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #efefef\"><div style=\"width:32px;height:32px;border-radius:50%;background:#dc2743\"></div><div><div style=\"font-size:13px;font-weight:600\">@thehomechef</div><div style=\"font-size:11px;color:#8e8e8e\">640K<!-- --> followers · <!-- -->YouTube</div></div></div><div style=\"aspect-ratio:1/1;background:#ded7cc;display:flex;align-items:flex-end;padding:18px\"><div style=\"font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#5c5346;font-weight:600\">Kissan</div></div><div style=\"padding:12px 14px;font-size:13px;line-height:1.5\"><span style=\"font-weight:600\">@thehomechef</span> <span>#sponsored breakfast series ep 12. no added preservatives in this one, which matters when you are feeding kids every morning.</span><div style=\"font-size:11px;color:#8e8e8e;margin-top:8px\">Sat, 15 Aug 2026 08:00:00 GMT</div></div></div></div><next-route-announcer style=\"position: absolute;\"></next-route-announcer></body></html>"
   },
   {
     "id": "OBS-CR-06",
     "postId": "CR-06",
-    "url": "http://localhost:3192/fixtures/post/CR-06",
+    "url": "http://localhost:3211/fixtures/post/CR-06",
     "pngRef": "/snapshots/CR-06.png",
     "domRef": "/snapshots/CR-06.html",
     "pngHash": "sha256-44e2ec8cebcde658d050c182e02a3c2c",
-    "domHash": "sha256-fd16c8e2c4e2d2acadc274096c34479d",
-    "capturedAt": "2026-08-20T00:13:46.291Z",
+    "domHash": "sha256-1a578d4054fc723c6f61430010417b27",
+    "capturedAt": "2026-08-20T00:20:14.029Z",
     "expandedRegions": 0,
-    "bytes": 20429
+    "bytes": 20429,
+    "domExcerpt": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1787185213017\" data-precedence=\"next_static/css/app/layout.css\"><title>@urban.grooming on Instagram</title><meta name=\"description\" content=\"Proof at the speed of publish.\"></head><body><div style=\"background:#fff;min-height:100vh;padding:24px;font-family:Inter, system-ui, sans-serif\"><div data-post-card=\"true\" style=\"max-width:470px;margin:0 auto;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden\"><div style=\"display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #efefef\"><div style=\"width:32px;height:32px;border-radius:50%;background:#dc2743\"></div><div><div style=\"font-size:13px;font-weight:600\">@urban.grooming</div><div style=\"font-size:11px;color:#8e8e8e\">156K<!-- --> followers · <!-- -->Instagram</div></div></div><div style=\"aspect-ratio:1/1;background:#ded7cc;display:flex;align-items:flex-end;padding:18px\"><div style=\"font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#5c5346;font-weight:600\">Rexona</div></div><div style=\"padding:12px 14px;font-size:13px;line-height:1.5\"><span style=\"font-weight:600\">@urban.grooming</span> <span>Paid partnership with Rexona. 72h freshness genuinely holds up on a 14 hour shoot day. it won't ever let you down.</span><div style=\"font-size:11px;color:#8e8e8e;margin-top:8px\">Wed, 19 Aug 2026 07:30:00 GMT</div></div></div></div><next-route-announcer style=\"position: absolute;\"></next-route-announcer></body></html>"
   }
 ];

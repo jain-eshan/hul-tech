@@ -47,7 +47,7 @@ export default function CreatorSweep() {
         with SHA-256. Open a snapshot to see the render, the timestamp and the hash.
       </div>
 
-      <div className="border border-[var(--border)] rounded bg-[var(--surface)] overflow-hidden">
+      <div className="border border-[var(--border)] rounded bg-[var(--surface)] overflow-x-auto">
         <table className="w-full text-[13px]">
           <thead>
             <tr className="border-b border-[var(--border)] text-left">
@@ -132,10 +132,17 @@ export default function CreatorSweep() {
                     <div className="mono break-all">{v}</div>
                   </div>
                 ))}
-                <a href={snap.domRef} target="_blank" rel="noreferrer"
-                  className="mono text-[var(--accent)] hover:underline inline-block pt-1">
-                  Open captured DOM ↗
-                </a>
+                <details className="pt-1">
+                  <summary className="mono text-[var(--accent)] cursor-pointer">
+                    View captured DOM
+                  </summary>
+                  <pre className="mono text-[10px] leading-relaxed whitespace-pre-wrap break-all mt-2 max-h-48 overflow-auto border border-[var(--border)] rounded p-2 bg-[var(--bg)]">
+{snap.domExcerpt}
+                  </pre>
+                  <div className="mono text-[var(--text-muted)] mt-1">
+                    excerpt shown · the DOM hash above is over the complete capture
+                  </div>
+                </details>
               </div>
             </div>
             <div className="px-5 py-3 border-t border-[var(--border)] mono text-[var(--text-muted)] leading-relaxed">

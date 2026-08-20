@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "verify": "tsx --tsconfig tsconfig.json scripts/verify-demos.ts"
+    "verify": "tsx --tsconfig tsconfig.json scripts/verify-demos.ts",
+    "standalone": "node scripts/build-standalone.mjs",
+    "verify:standalone": "node scripts/verify-standalone.mjs"
   },
   "dependencies": {
     "clsx": "2.1.1",
@@ -23,6 +25,7 @@
     "@types/react": "18.3.11",
     "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.20",
+    "esbuild": "^0.24.0",
     "playwright-core": "^1.62.1",
     "postcss": "8.4.47",
     "tailwindcss": "3.4.13",

@@ -30,6 +30,15 @@ export default function LiveCheck() {
     setBusy(true);
     // Local result first, so there is always something to render.
     const local = evaluateText(copy, market).verdict;
+
+    // The standalone single-file build has no server to call. That is the same
+    // deterministic path the served app falls back to when the model times out.
+    if (typeof window !== "undefined" && (window as unknown as { __PRAMAAN_STATIC__?: boolean }).__PRAMAAN_STATIC__) {
+      setVerdict(local);
+      setBusy(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/check", {
         method: "POST",

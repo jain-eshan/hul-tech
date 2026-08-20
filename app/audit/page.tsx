@@ -41,7 +41,7 @@ export default function AuditTrail() {
         append-only · rule set {RULE_SET_VERSION} · {ruleSetHash()}
       </div>
 
-      <div className="border border-[var(--border)] rounded bg-[var(--surface)] overflow-hidden">
+      <div className="border border-[var(--border)] rounded bg-[var(--surface)] overflow-x-auto">
         <table className="w-full text-[13px]">
           <thead>
             <tr className="border-b border-[var(--border)] text-left">
