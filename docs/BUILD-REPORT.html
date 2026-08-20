@@ -1,0 +1,660 @@
+<title>PRAMAAN Build Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Archivo:wght@400;500;600&display=swap">
+
+<style>
+  /* Light palette is the complete set; dark redefines only the tokens.
+     Neutrals carry a slight warm bias, inherited from the product's stone ground. */
+  :root {
+    --bg: #FAF9F7;
+    --surface: #FFFFFF;
+    --surface-sunk: #F5F3F0;
+    --border: #E4E0DA;
+    --border-strong: #CFC9C0;
+    --text: #1C1917;
+    --text-muted: #736C63;
+    --accent: #1E3A8A;
+    --accent-soft: #EEF2FB;
+    --done: #15803D;
+    --done-bg: #EFFaF1;
+    --blocked: #B91C1C;
+    --blocked-bg: #FDF1F1;
+    --pending: #B45309;
+    --pending-bg: #FDF7EC;
+    --shadow: 0 1px 2px rgba(28, 25, 23, 0.04);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #16150F;
+      --surface: #1E1D17;
+      --surface-sunk: #232219;
+      --border: #33312A;
+      --border-strong: #4A4740;
+      --text: #EDEAE3;
+      --text-muted: #A19A8F;
+      --accent: #A8C0F0;
+      --accent-soft: #22283A;
+      --done: #6EE7A0;
+      --done-bg: #16281D;
+      --blocked: #F98B8B;
+      --blocked-bg: #2B1919;
+      --pending: #F0B450;
+      --pending-bg: #2A2114;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16150F;
+    --surface: #1E1D17;
+    --surface-sunk: #232219;
+    --border: #33312A;
+    --border-strong: #4A4740;
+    --text: #EDEAE3;
+    --text-muted: #A19A8F;
+    --accent: #A8C0F0;
+    --accent-soft: #22283A;
+    --done: #6EE7A0;
+    --done-bg: #16281D;
+    --blocked: #F98B8B;
+    --blocked-bg: #2B1919;
+    --pending: #F0B450;
+    --pending-bg: #2A2114;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 0 24px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  /* ── Masthead ────────────────────────────────────────────────────── */
+  header { padding: 72px 0 40px; border-bottom: 1px solid var(--border-strong); }
+  .eyebrow {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--text-muted); margin: 0 0 18px;
+  }
+  h1 {
+    font-family: Newsreader, Georgia, serif;
+    font-size: clamp(38px, 6vw, 54px); font-weight: 500; line-height: 1.06;
+    letter-spacing: -0.018em; margin: 0 0 18px; text-wrap: balance;
+  }
+  .standfirst {
+    font-family: Newsreader, Georgia, serif;
+    font-size: 20px; line-height: 1.5; color: var(--text-muted);
+    margin: 0; max-width: 62ch; text-wrap: pretty;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 26px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12.5px; color: var(--text-muted);
+  }
+
+  /* ── Sections ────────────────────────────────────────────────────── */
+  section { padding-top: 52px; }
+  h2 {
+    font-family: Newsreader, Georgia, serif;
+    font-size: 30px; font-weight: 500; letter-spacing: -0.012em;
+    margin: 0 0 6px; text-wrap: balance;
+  }
+  .section-note { color: var(--text-muted); margin: 0 0 26px; max-width: 64ch; }
+  h3 {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--text-muted); margin: 34px 0 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  p { margin: 0 0 16px; max-width: 68ch; text-wrap: pretty; }
+
+  /* ── Status chips: state encoded in shape as well as colour ──────── */
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor;
+    white-space: nowrap; font-weight: 500;
+  }
+  .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .chip.done { color: var(--done); background: var(--done-bg); }
+  .chip.blocked { color: var(--blocked); background: var(--blocked-bg); }
+  .chip.pending { color: var(--pending); background: var(--pending-bg); }
+  .chip.cut { color: var(--text-muted); background: var(--surface-sunk); }
+  .chip.cut::before { border-radius: 0; }
+
+  /* ── Item rows ───────────────────────────────────────────────────── */
+  .items { display: flex; flex-direction: column; gap: 1px; background: var(--border);
+           border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .item { background: var(--surface); padding: 16px 18px; display: grid;
+          grid-template-columns: 1fr auto; gap: 6px 16px; align-items: start; }
+  .item-title { font-weight: 600; font-size: 15.5px; }
+  .item-body { grid-column: 1 / -1; color: var(--text-muted); font-size: 14.5px; margin: 0; max-width: 66ch; }
+  .item-body code, code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.88em; background: var(--surface-sunk); padding: 1px 5px;
+    border-radius: 4px; border: 1px solid var(--border);
+  }
+
+  /* ── Callout ─────────────────────────────────────────────────────── */
+  .callout {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 6px;
+    padding: 18px 20px; margin: 24px 0; box-shadow: var(--shadow);
+  }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.warn { border-left-color: var(--pending); }
+
+  /* ── Question blocks ─────────────────────────────────────────────── */
+  .q { border-top: 1px solid var(--border); padding: 22px 0; }
+  .q:last-child { border-bottom: 1px solid var(--border); }
+  .q-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .q-num {
+    font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-muted);
+    padding-top: 3px; flex-shrink: 0;
+  }
+  .q-title { font-weight: 600; font-size: 17px; font-family: Newsreader, Georgia, serif; }
+  .q-default {
+    margin-top: 10px; font-size: 14px; color: var(--text-muted);
+    padding-left: 14px; border-left: 2px solid var(--border-strong);
+  }
+  .q-default strong { color: var(--text); font-weight: 600; }
+
+  /* ── Table ───────────────────────────────────────────────────────── */
+  .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 520px; }
+  th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th {
+    font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 600;
+    background: var(--surface-sunk);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
+
+  ul { margin: 0 0 16px; padding-left: 20px; max-width: 68ch; }
+  li { margin-bottom: 7px; }
+  strong { font-weight: 600; }
+  a { color: var(--accent); }
+
+  footer {
+    margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--border-strong);
+    font-family: ui-monospace, monospace; font-size: 12.5px; color: var(--text-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Project NEXT · TechTonic Season 8 · Build report</p>
+  <h1>PRAMAAN: what is built, what is not, and what I need from you</h1>
+  <p class="standfirst">
+    The prototype engine and all three demos are complete and verified. None of the
+    three graded submission artefacts are finished — two are blocked on a decision only
+    you can make.
+  </p>
+  <div class="meta">
+    <span>20 Aug 2026</span>
+    <span>branch claude/prd-project-planning-huyu5w</span>
+    <span>rule set v2026.08</span>
+    <span>9 commits</span>
+  </div>
+</header>
+
+<section>
+  <h2>The headline</h2>
+  <p class="section-note">Read this part even if you read nothing else.</p>
+
+  <p>
+    The <strong>product</strong> is done. The engine, all nine screens, the three demos
+    and the full T0 feature set are built and verified by four automated suites that
+    all pass. You can open it right now and walk the pitch end to end, with the wifi off.
+  </p>
+  <p>
+    The <strong>submission</strong> is not. The PRD requires three artefacts, and today
+    we have zero of them finished:
+  </p>
+
+  <div class="items">
+    <div class="item">
+      <span class="item-title">Vercel web app</span>
+      <span class="chip blocked">blocked</span>
+      <p class="item-body">
+        Built and passing, but not deployed. Vercel cannot link the repository —
+        its GitHub app has no access to <code>jain-eshan/hul-tech</code>. One click in
+        Vercel settings clears this. In the meantime the app is live as a shareable
+        single-file page, so this is not blocking the demo, only the stated deliverable.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Google AI Studio published agent</span>
+      <span class="chip blocked">blocked</span>
+      <p class="item-body">
+        The full system prompt is written and generated from the same rule pack the app
+        uses, so the two cannot disagree. It cannot be published because the save name
+        is <code>Techtonic_&lt;TeamName&gt;_PRAMAAN</code> and I do not know the team name.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Three-slide deck</span>
+      <span class="chip pending">not started</span>
+      <p class="item-body">
+        The PRD maps content to slides thoroughly but specifies nothing about the deck's
+        design. This is a graded artefact and it cannot be cut.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Screen recordings of Demos A, B and C</span>
+      <span class="chip pending">not started</span>
+      <p class="item-body">
+        §16 rates &ldquo;live demo fails on stage&rdquo; as a medium-likelihood risk whose
+        entire mitigation is pre-recorded demos. That mitigation does not exist yet —
+        though the single-file build is arguably a stronger one, since it runs with no
+        network at all.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What is complete</h2>
+  <p class="section-note">
+    Every claim below is backed by a suite you can run yourself, not by my assertion.
+  </p>
+
+  <h3>The three demos</h3>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">Demo A — the market strip</span>
+      <span class="chip done">verified</span>
+      <p class="item-body">
+        Twelve Rexona variants resolve to 9 cleared / 2 needs-edit / 1 blocked at
+        confidence 0.91, animating over four seconds. <code>Apply</code> rewrites the copy
+        in the left pane and the verdict is <em>recomputed</em> from the mutated copy
+        rather than toggled — if a fix does not actually clear the asset, the chip does
+        not go green.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Demo B — the refusal</span>
+      <span class="chip done">verified</span>
+      <p class="item-body">
+        Four reasoning cards, a twelve-market divergence grid with per-market reasoning,
+        and the copy-testing callout. Built as a labelled fictional composite and anchored
+        on <code>BRAND-DOVE-1</code>, which is a real entry in the rule pack — so the
+        brand-constraint card cites something the engine actually holds.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Demo C — the replay</span>
+      <span class="chip done">verified</span>
+      <p class="item-body">
+        Publishing v2026.09 re-invokes <code>evaluate()</code> over the portfolio under both
+        rule versions and surfaces exactly the six assets the PRD lists, in the PRD's
+        order, with the PRD's reach figures. Nothing is read from a fixture.
+      </p>
+    </div>
+  </div>
+
+  <h3>Engine and data</h3>
+  <ul>
+    <li><strong>47 rules across 8 regulators</strong>, every one carrying a <code>sourceUrl</code>; draft-status rules labelled &ldquo;draft&rdquo; in the UI because they are not in force.</li>
+    <li><strong>25 approved claims</strong> plus the retired register and the brand codex.</li>
+    <li><strong>Deterministic and judgment checks run on physically separate code paths.</strong> Mechanical checks never touch a model, which is what makes the latency split on every verdict real rather than staged.</li>
+    <li><strong>Clause citation is structural, not tested.</strong> <code>Finding.ruleId</code> is a required field and findings can only be built through a constructor that resolves the rule from the pack and throws if it is absent. A finding citing a rule that does not exist cannot be constructed.</li>
+  </ul>
+
+  <h3>Screens</h3>
+  <p>
+    Inbox · Batch Review · Asset Detail · Moment Risk · Ring 0 · Creator Sweep ·
+    Audit Trail · Rule Replay · Accuracy Card · Live Check.
+  </p>
+
+  <h3>T0 features closed in the second pass</h3>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">Ring 0 — constrain at generation</span>
+      <span class="chip done">done</span>
+      <p class="item-body">
+        <code>pramaan.constrain()</code> plus a split-screen showing the same brief with and
+        without the constraint pack injected. A top-three differentiator that cost about
+        ninety minutes.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Accuracy card</span>
+      <span class="chip done">done</span>
+      <p class="item-body">
+        Computed live over 30 labelled cases on every load — never a number typed into a
+        slide. It also states its own limits, which is the part that makes it credible.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Point-in-time evidence snapshot and creator sweep</span>
+      <span class="chip done">done</span>
+      <p class="item-body">
+        A real capture pipeline: headless render, collapsed &ldquo;more&rdquo; folds expanded
+        before capture, PNG and DOM hashed with SHA-256. Three violations and three clean
+        posts, as §11.9 specifies.
+      </p>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <p>
+      <strong>Say this one out loud rather than letting a judge find it.</strong> The build
+      environment has no outbound network, so the pages captured are local fixtures, not a
+      live crawl. The <em>pipeline</em> is real — the renders, hashes and timestamps in the
+      snapshot modal are genuine captures. The screen states that distinction itself.
+    </p>
+  </div>
+
+  <h3>Verification</h3>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Suite</th><th>Checks</th><th>What it guards</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>npm run verify</code></td><td class="num">12</td><td>Demo A resolves 9/2/1 and Demo C surfaces six, from the engine rather than a fixture</td></tr>
+        <tr><td><code>scripts/acceptance.mjs</code></td><td class="num">34</td><td>Every §13 criterion, driven in a real browser</td></tr>
+        <tr><td><code>scripts/offline-check.mjs</code></td><td class="num">12</td><td>Full walkthrough with the network down; zero external requests</td></tr>
+        <tr><td><code>scripts/verify-standalone.mjs</code></td><td class="num">16</td><td>The single-file build, loaded over <code>file://</code> with all requests aborted</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:14px">All 74 pass.</p>
+
+  <h3>Persona audit</h3>
+  <p>
+    You asked me to check the personas against the PRD. I found four defects, one of them
+    serious:
+  </p>
+  <ul>
+    <li><strong>Brand Director actions were written to the append-only ledger under the ABM's name.</strong> In a product whose entire argument is defensibility, an audit trail that names the wrong approver is worse than no audit trail.</li>
+    <li><code>canShip</code> existed but was never called, so Ship was enabled for every persona including Legal.</li>
+    <li>§11.2 requires switching to change <em>visible columns and available actions</em>. Only actions changed; half the spec was unimplemented.</li>
+    <li>Brand Director was a functional clone of Legal, with none of §3.2's distinct capabilities.</li>
+  </ul>
+  <p>
+    All fixed. Legal now sees routing and severity, Director sees reach and spend, and
+    Legal clears without publishing — because PRAMAAN clears, and publication is a
+    separate human act.
+  </p>
+</section>
+
+<section>
+  <h2>What is pending</h2>
+  <p class="section-note">Split by whether it is blocked on you, on time, or on a deliberate decision.</p>
+
+  <h3>Blocked on a decision from you</h3>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">Publish the AI Studio agent</span>
+      <span class="chip blocked">needs team name</span>
+      <p class="item-body">Prompt is written. Publishing plus the incognito check is about fifteen minutes once the name exists.</p>
+    </div>
+    <div class="item">
+      <span class="item-title">Deploy to Vercel</span>
+      <span class="chip blocked">needs GitHub access</span>
+      <p class="item-body">Grant the Vercel GitHub app access to the repository and I deploy in one call — with auto-deploy on every push thereafter.</p>
+    </div>
+  </div>
+
+  <h3>Not started, not blocked</h3>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">The three-slide deck</span>
+      <span class="chip pending">pending</span>
+      <p class="item-body">Content is mapped in the PRD; the design is not specified anywhere. See question 3.</p>
+    </div>
+    <div class="item">
+      <span class="item-title">Demo recordings and two dry runs</span>
+      <span class="chip pending">pending</span>
+      <p class="item-body">Best done against the deployed URL, so this sits behind the Vercel decision.</p>
+    </div>
+  </div>
+
+  <h3>Deliberately cut</h3>
+  <p>
+    These were cut under your &ldquo;critical path only&rdquo; instruction and remain cut.
+    None is a T0 feature.
+  </p>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">PULSE — portfolio exposure (D1–D7)</span>
+      <span class="chip cut">cut</span>
+      <p class="item-body">Heat map, claim inventory, expiry radar. Tier 2–3. The PRD itself labels this data &ldquo;illustrative&rdquo;.</p>
+    </div>
+    <div class="item">
+      <span class="item-title">MEMORY — precedent engine (E1–E6)</span>
+      <span class="chip cut">cut</span>
+      <p class="item-body">Precedent search and the objection history. Tier 2–3.</p>
+    </div>
+    <div class="item">
+      <span class="item-title">Marketplace monitoring and answer-surface probes (B3, B5–B12)</span>
+      <span class="chip cut">cut</span>
+      <p class="item-body">Tier 2–3 throughout, and §10.6 explicitly says not to build B8–B12.</p>
+    </div>
+    <div class="item">
+      <span class="item-title">WATCH → Live Assets</span>
+      <span class="chip cut">cut from nav</span>
+      <p class="item-body">
+        It had a navigation entry in §11.2 and no layout anywhere in §11. I removed the
+        entry rather than invent the screen — an unbuilt nav item reads worse than a
+        shorter nav.
+      </p>
+    </div>
+  </div>
+
+  <h3>Not a build task, but read before writing any slide</h3>
+  <p>
+    §18 lists five items to verify before asserting and fourteen claims not to make. Two
+    matter directly for the deck: the <strong>EU AI Act Article 50 status</strong> (§18.1
+    calls it the highest priority) and whether <strong>ASCI's AI-labelling guidelines are
+    final or still draft</strong>. The do-not-assert list includes &ldquo;HUL had an ad
+    pulled&rdquo; — no such instance was found between 2020 and 2026.
+  </p>
+</section>
+
+<section>
+  <h2>Questions I need answered</h2>
+  <p class="section-note">
+    Ranked by what they block. Each states what I will do by default if you do not answer,
+    so nothing stalls waiting on you.
+  </p>
+
+  <div class="q">
+    <div class="q-head"><span class="q-num">01</span><span class="q-title">What is the team name?</span></div>
+    <p>
+      The AI Studio agent saves as <code>Techtonic_&lt;TeamName&gt;_PRAMAAN</code>. This is
+      the single highest-value unblocked item on the list, because the rulebook explicitly
+      demands a published agent and the work is already done.
+    </p>
+    <p class="q-default"><strong>No default exists.</strong> I cannot guess a team name.</p>
+  </div>
+
+  <div class="q">
+    <div class="q-head"><span class="q-num">02</span><span class="q-title">Which deadline is real — 20 or 25 August?</span></div>
+    <p>
+      §18.1 flags this itself: the rulebook says submission on 20 August, the launch
+      session said the top five are announced on 25 August. Everything I have planned
+      assumes the earlier date, which is the safe reading but also the one that forced
+      the cut list.
+    </p>
+    <p class="q-default"><strong>Default:</strong> I keep planning against 20 August. If it is really the 25th, PULSE and MEMORY come back into scope and the cut list was unnecessarily aggressive.</p>
+  </div>
+
+  <div class="q">
+    <div class="q-head"><span class="q-num">03</span><span class="q-title">Who writes the deck, and against what template?</span></div>
+    <p>
+      You chose &ldquo;match the app's design system&rdquo;, which I can do. But I do not
+      know whether your team or the competition expects a house format, and a deck that
+      ignores a required template is worse than a plainer one that follows it.
+    </p>
+    <p class="q-default"><strong>Default:</strong> I generate a three-slide <code>.pptx</code> on the app's palette and type scale, and you overwrite it if a template turns up.</p>
+  </div>
+
+  <div class="q">
+    <div class="q-head"><span class="q-num">04</span><span class="q-title">Does the Moment Risk scenario land for this room?</span></div>
+    <p>
+      I built a fictional composite, as you chose: a creator trend contrasting real and
+      AI-generated beauty imagery, which a beauty advertiser wants to join using AI-generated
+      models. It is deliberately the one moment where the brand's own method <em>is</em> the
+      criticism, and it conflicts with a pledge already in the rule pack.
+    </p>
+    <p>
+      I cannot judge whether that reads as clever or as too neat to a panel that knows the
+      category. You can.
+    </p>
+    <p class="q-default"><strong>Default:</strong> it ships as built. Changing the scenario is about thirty minutes since only the copy changes.</p>
+  </div>
+
+  <div class="q">
+    <div class="q-head"><span class="q-num">05</span><span class="q-title">Will anyone with real regulatory knowledge review the 30 accuracy labels?</span></div>
+    <p>
+      I authored them from the rule pack. The card reads 100% across precision, recall and
+      high-severity recall, and I have made it state plainly that this measures agreement
+      with <em>one author's reading of the rules</em>, not with a regulator's. If a judge
+      presses on that number, the honest answer is the one already on the screen.
+    </p>
+    <p class="q-default"><strong>Default:</strong> the card ships with its limits stated. Thirty minutes from someone who knows ASCI practice would make the number meaningfully stronger.</p>
+  </div>
+
+  <div class="q">
+    <div class="q-head"><span class="q-num">06</span><span class="q-title">Where does the figure of 1,412 live assets come from?</span></div>
+    <p>
+      The PRD asserts it in §11.7 without a source. I could not derive it from anything in
+      the document, and the prototype holds 60 seeded assets. Rather than let the animated
+      counter imply we re-ran 1,412 assets, the screen reports both numbers: what was
+      actually evaluated, and the production scope figure labelled as such.
+    </p>
+    <p class="q-default"><strong>Default:</strong> both figures stay on screen. If 1,412 has a real basis, say so and I will cite it.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Where the PRD was ambiguous or self-contradictory</h2>
+  <p class="section-note">
+    Six places where the document disagreed with itself. I resolved each in favour of the
+    demo screens and recorded the reasoning in the code rather than fixing it quietly —
+    if you disagree with a call, the reasoning is there to argue with.
+  </p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Where</th><th>The contradiction</th><th>How I resolved it</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>§8.1 vs §11.5</td>
+          <td>The ledger substantiates the clinical 72h claim in &ldquo;EU, UK, AE&rdquo;, but Demo A requires both UK and DE to return AMBER</td>
+          <td>Demo screen treated as authoritative; the dossier is scoped to AE. Recorded in <code>data/claims.ts</code></td>
+        </tr>
+        <tr>
+          <td>§8.1 vs §11.4</td>
+          <td>Both demo screens offer &ldquo;72h freshness&rdquo; as the fix for UK and DE, but the ledger registers it in neither</td>
+          <td>Registered in UK and DE. A fix that resolves to nothing is worse than offering no fix</td>
+        </tr>
+        <tr>
+          <td>§7.1 vs the severity ladder</td>
+          <td>ASCI-I-1 is <code>critical</code>, so it returns RED, but its own test text says wrong-market matches should be AMBER</td>
+          <td>Severity made outcome-dependent for that rule. A registered claim in the wrong market is a paperwork gap; an unmatched claim is an unsubstantiated assertion</td>
+        </tr>
+        <tr>
+          <td>§11.7, rows 3 and 4</td>
+          <td>Two of the six replay assets could never appear as <em>newly</em> non-compliant, because they already failed the old rule</td>
+          <td>Reseeded so they genuinely transition. Without this the replay surfaces four, not six</td>
+        </tr>
+        <tr>
+          <td>§6 vs §10.2 vs §13</td>
+          <td>Ring 0 is tiered T2 in the feature list, called &ldquo;real&rdquo; in the scope table, and required by an acceptance criterion</td>
+          <td>Built it. It is ninety minutes of work and a top-three differentiator</td>
+        </tr>
+        <tr>
+          <td>§12.1 vs §10.1</td>
+          <td>The agent must emit strict JSON, and is also the artefact where a judge types copy and gets a verdict</td>
+          <td>It emits a short plain-language verdict <em>then</em> the JSON block. Raw JSON serves the first requirement and fails the second</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Things the PRD simply does not specify</h3>
+  <ul>
+    <li><strong>Three screens are graded by §13 but drawn nowhere in §11</strong> — the accuracy card, the Ring 0 split-screen, and WATCH → Live Assets. I designed the first two and cut the third.</li>
+    <li><strong>Nine of the twelve Rexona variants have no copy</strong>, across eight non-English languages. I wrote them.</li>
+    <li><strong>The Moment Risk moment is never named.</strong> §11.6 is layout-complete and content-empty.</li>
+    <li><strong>The deck has no design specification at all.</strong></li>
+    <li><strong>Reach, spend and reversibility figures are invented</strong> throughout the seed data. They drive the consequence-based routing, so the routing behaviour is real, but the inputs are illustrative.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>One place I could not follow the spec, and why</h2>
+  <p>
+    §11.13 asks for progressive disclosure: deterministic findings at roughly 400ms,
+    judgment findings streaming over two to three seconds, so the architecture is visible
+    to a judge. I built the staged reveal as specified.
+  </p>
+  <p>
+    But the reason the spec gives for it does not hold here. <strong>Our engine returns in
+    single-digit milliseconds</strong>, so there is nothing to stream — the reveal is a
+    presentation of a result that was already complete. I kept it because it does make the
+    deterministic and judgment split legible, which is the real point, but you should know
+    that the timing is a deliberate pause, not a measurement.
+  </p>
+  <p>
+    The genuinely honest version of the same argument is already on every verdict: the
+    measured deterministic and judgment milliseconds, shown separately. That number is
+    real. If a judge asks why clearance takes 90 seconds in the PRD and 3 milliseconds on
+    screen, the answer is that the prototype does no multimodal extraction — the claims are
+    cached, exactly as the replay architecture intends.
+  </p>
+</section>
+
+<section>
+  <h2>Risks I would flag</h2>
+  <ul>
+    <li>
+      <strong>Nothing is deployed and nothing is recorded.</strong> This is the largest gap
+      and both are cheap. The single-file build partly covers it — it runs from a laptop
+      with the wifi off, which is a stronger mitigation than a video.
+    </li>
+    <li>
+      <strong>The accuracy card reads 100%.</strong> A sharp judge will push on that. The
+      screen answers honestly before they ask, but rehearse the answer: thirty cases,
+      author-written labels, enough to catch regressions and not enough to establish
+      production accuracy.
+    </li>
+    <li>
+      <strong>Three of nine screens use simulated or seeded data</strong> — Creator Sweep
+      fixtures, the Moment Risk composite, and the portfolio reach figures. Each is labelled
+      in the UI. §10.2's scope-honesty rule is the right instinct and it is worth saying
+      these aloud rather than waiting to be asked.
+    </li>
+    <li>
+      <strong>PULSE and MEMORY are absent from a product pitched as five agents.</strong> If
+      a judge counts, they will notice. The answer is prioritisation discipline, which §1.4
+      already arms you for — but have it ready.
+    </li>
+  </ul>
+</section>
+
+<footer>
+  Prototype · rule text paraphrased for machine execution · portfolio data illustrative ·
+  rule set v2026.08 · report generated 20 Aug 2026
+</footer>
+
+</div>
