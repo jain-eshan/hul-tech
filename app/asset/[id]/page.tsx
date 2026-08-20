@@ -9,7 +9,7 @@ import { evaluate } from "@/lib/engine";
 import { useApp, approverName } from "@/lib/store";
 import CreativeMock from "@/components/CreativeMock";
 import FindingCard from "@/components/FindingCard";
-import { VerdictChip } from "@/components/Verdict";
+import { VerdictChip, AbstentionCard } from "@/components/Verdict";
 import { severityColor, cx } from "@/lib/ui";
 import { useMounted } from "@/lib/useMounted";
 import type { Finding, VerdictStatus } from "@/lib/types";
@@ -159,7 +159,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
 
         <div className="space-y-5">
           <div className="flex items-center gap-3">
-            <VerdictChip status={status} confidence={verdict.confidence}
+            <VerdictChip status={status} confidence={verdict.confidence} abstained={verdict.abstained}
               clearedIn={`evaluated in ${verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms`} />
             <span className="mono text-[var(--text-muted)]">
               {verdict.timings.deterministicMs}ms deterministic · {verdict.timings.judgmentMs}ms judgment
@@ -226,6 +226,10 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
               </div>
             )}
           </div>
+
+          {verdict.abstained && stage >= 2 && (
+            <AbstentionCard reasons={verdict.abstentionReasons} />
+          )}
 
           <div className="border border-[var(--border)] rounded bg-[var(--surface)] divide-y divide-[var(--border)]">
             {accordions.map((a) => (

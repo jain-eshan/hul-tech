@@ -166,6 +166,20 @@ await page.waitForTimeout(800);
 check("Keyboard: 'a' applies the active fix",
   (await text()).includes("cleared against rule set"));
 
+// ── Abstention (§5.4 principle 7, §6 A9, §14.2) ───────────────────────────
+await page.goto(`${BASE}/live`, { waitUntil: "load" });
+await page.waitForTimeout(500);
+await page.locator("button:has-text('Now with 30% more')").click();
+await page.waitForTimeout(200);
+await page.locator("button:has-text('Run clearance')").click();
+await page.waitForTimeout(2000);
+const abstain = await text();
+check("Ambiguous input abstains rather than guessing",
+  abstain.includes("abstained") && abstain.includes("escalated"));
+check("Abstention cites ASCI-IV-2 rather than an unsubstantiated-claim guess",
+  abstain.includes("asci-iv-2") && !abstain.includes("does not resolve to any approved claim"));
+check("Abstention says what it would need to decide", abstain.includes("comparison basis"));
+
 // ── Personas ──────────────────────────────────────────────────────────────
 await page.goto(`${BASE}/`, { waitUntil: "load" });
 await page.waitForTimeout(600);

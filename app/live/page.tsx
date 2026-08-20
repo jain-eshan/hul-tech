@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Play } from "lucide-react";
 import { evaluateText } from "@/lib/engine";
 import FindingCard from "@/components/FindingCard";
-import { VerdictChip } from "@/components/Verdict";
+import { VerdictChip, AbstentionCard } from "@/components/Verdict";
 import type { Market, Verdict } from "@/lib/types";
 
 // PRD §11.12 — the "try it yourself" moment. Renders results in the exact same
@@ -15,6 +15,7 @@ const EXAMPLES = [
   "Our new formula is 100% natural and clinically proven to remove 99.9% of germs. Dermatologist recommended. Limited stock — only 3 left!",
   "India's No.1 anti-dandruff shampoo. Cures dandruff in one wash, guaranteed.",
   "72h freshness. It won't ever let you down.",
+  "Now with 30% more.",
 ];
 
 const MARKETS: Market[] = ["IN", "UK", "DE", "AE", "ZA", "BR", "ID", "PH", "TH", "MX", "VN", "EG"];
@@ -95,8 +96,9 @@ export default function LiveCheck() {
         <div>
           {verdict ? (
             <div className="space-y-4">
-              <VerdictChip status={verdict.status} confidence={verdict.confidence}
+              <VerdictChip status={verdict.status} confidence={verdict.confidence} abstained={verdict.abstained}
                 clearedIn={`evaluated in ${verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms`} />
+              {verdict.abstained && <AbstentionCard reasons={verdict.abstentionReasons} />}
               {verdict.findings.length ? (
                 <div className="space-y-3">
                   {verdict.findings.map((f, i) => (

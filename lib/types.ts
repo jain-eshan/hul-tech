@@ -167,6 +167,14 @@ export interface Verdict {
   findings: Finding[];
   /** Milliseconds of engine time, split so the architecture is visible (§5.2). */
   timings: { deterministicMs: number; judgmentMs: number };
+  /**
+   * Set when the engine declined to decide rather than guessing (§5.4 principle 7,
+   * §6 A9, §14.2). An abstention is not a finding — it is the absence of one — so it
+   * cannot cite a clause and does not belong in findings[].
+   */
+  abstained: boolean;
+  /** What could not be determined, and what would be needed to determine it. */
+  abstentionReasons: string[];
   modelVersions: Record<string, string>;
   createdAt: string;
 }

@@ -185,7 +185,7 @@ const VECTORS: {
     copy: "India's No.1 shampoo for damaged hair.", expect: "RED" },
   { label: "Ambiguous — must abstain, not guess", market: "IN",
     copy: "Now with 30% more.", expect: "abstain, routing \"abstain\", confidence < 0.6, empty findings",
-    agentOnly: `This is the one vector where the agent is expected to do something the deterministic engine cannot. The engine resolves "Now with 30% more" against the ledger, finds nothing, and reports an unsubstantiated claim under ASCI-I-1. That is a defensible answer — but the better answer is to notice that "30% more" than *what* is not stated, no product is identified, and there is nothing to resolve. Recognising that a question is unanswerable is a judgment-path capability, which is exactly why the agent is worth having on top of the engine.` },
+    agentOnly: `The engine now abstains here too, so the agent and the app agree. It fires ASCI-IV-2 — a comparison must be verifiable, and "30% more" names nothing to compare against — then declines to resolve the claim, because "more than the old formula", "more than a competitor" and "more than nothing" are three different assertions with three different verdicts. The agent should do the same: cite ASCI-IV-2 if it wishes, set routing to "abstain", keep confidence below 0.6, and say what it would need. What it must NOT do is report the claim as unsubstantiated, which presumes it knows what was claimed.` },
 ];
 
 const sheet = VECTORS.map((v, i) => {
@@ -197,8 +197,8 @@ const sheet = VECTORS.map((v, i) => {
 > ${v.copy}
 
 **Expected status:** ${v.expect}
-**Expected rule ids:** ${v.agentOnly ? "none" : ids.length ? ids.join(", ") : "none — must return GREEN with an empty findings array"}
-${v.agentOnly ? `\n> **The engine and the agent differ here, deliberately.** ${v.agentOnly}\n> For reference, the deterministic engine returns: ${ids.join(", ") || "no findings"}.\n` : ""}`;
+**Expected rule ids:** ${ids.length ? ids.join(", ") : "none — must return GREEN with an empty findings array"}
+${v.agentOnly ? `\n> **On abstention.** ${v.agentOnly}\n` : ""}`;
 }).join("\n");
 
 // ── The document ───────────────────────────────────────────────────────────

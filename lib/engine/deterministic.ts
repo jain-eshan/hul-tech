@@ -170,6 +170,27 @@ export function netQuantityFormat(text: string): TestResult {
   return none;
 }
 
+/**
+ * ASCI-IV-2 — comparisons must be factual, verifiable and on like-for-like attributes.
+ *
+ * A quantified comparative asserts a relationship to something. "30% more" is not a
+ * claim until the referent is named: more than the old formula, more than a competitor,
+ * more than nothing at all. Without a stated basis the comparison cannot be verified by
+ * anyone, which is the whole point of the clause.
+ */
+const COMPARATIVE = /\b\d+(\.\d+)?\s*(%|x)?\s*(more|less|extra|better|stronger|longer|faster|whiter|softer|smoother)\b/i;
+const BASIS = /\bthan\b|\bvs\.?\b|\bversus\b|\bcompared (to|with)\b|\bagainst\b/i;
+
+export function comparativeWithoutBasis(text: string): TestResult {
+  const spans = spansFor(text, COMPARATIVE);
+  if (!spans.length || BASIS.test(text)) return none;
+  return {
+    matched: true,
+    spans,
+    detail: `"${spans[0].text}" states no comparison basis`,
+  };
+}
+
 /** ASCI-I-5 — every asterisk must bind to a resolving footnote. */
 export function asteriskBinding(text: string): TestResult {
   const marks = spansFor(text, /\*/);

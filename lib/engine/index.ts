@@ -311,9 +311,13 @@ export function evaluate(asset: Asset, opts: RuleSetOptions = RULESET_CURRENT): 
 
   // ── Judgment path (model in production, local over the same pack here) ────
 
+  const abstentionReasons: string[] = [];
+
   for (const e of asset.extracted) {
     const m = matchClaim(e, market, asset.sku);
     if (m.outcome === "matched" || m.outcome === "not_objective") continue;
+
+
 
     if (m.outcome === "retired") {
       findings.push(finding("ASCI-I-1", {
@@ -339,6 +343,31 @@ export function evaluate(asset: Asset, opts: RuleSetOptions = RULESET_CURRENT): 
       continue;
     }
 
+    // The claim resolves to nothing in the ledger. Before reporting it as
+    // unsubstantiated, check whether it is even a determinable claim.
+    //
+    // A quantified comparative with no stated basis is not. "30% more" is not a claim
+    // until the referent is named — more than the old formula, than a competitor, or
+    // than nothing at all are three different assertions with three different verdicts.
+    // Reporting it as unsubstantiated presumes we know which one was meant.
+    //
+    // This check runs only here, on unmatched spans, because a claim that resolves to
+    // the ledger carries its comparison basis in the dossier (§7.1 ASCI-IV-2 requires
+    // "a comparison_basis field AND a dossier ref"). Firing it on an approved claim
+    // would be a false positive on exactly the copy the ledger exists to bless.
+    const comparative = has("ASCI-IV-2") ? d.comparativeWithoutBasis(e.claimText) : { matched: false, spans: [] };
+    if (comparative.matched) {
+      findings.push(finding("ASCI-IV-2", {
+        quotedText: comparative.spans[0].text,
+        explanation: `Comparisons must be factual and verifiable, and "${comparative.spans[0].text}" names nothing to compare against.`,
+        suggestedFix: "State the comparison basis explicitly, and hold the supporting data on file.",
+      }));
+      abstentionReasons.push(
+        `"${e.claimText.trim()}" cannot be resolved against the claims ledger until the comparison basis is stated. Name the referent and the SKU and this becomes decidable.`,
+      );
+      continue;
+    }
+
     findings.push(finding("ASCI-I-1", {
       quotedText: e.claimText,
       explanation: `"${e.claimText}" does not resolve to any approved claim for ${asset.sku} in ${marketName} (best match ${(m.confidence * 100).toFixed(0)}%, below the ${MATCH_THRESHOLD * 100}% floor). Unmatched claims are never guessed.`,
@@ -360,7 +389,10 @@ export function evaluate(asset: Asset, opts: RuleSetOptions = RULESET_CURRENT): 
   // Confidence falls with judgment-path involvement and with near-threshold matches.
   const judgmentFindings = findings.filter((f) => f.testType === "judgment").length;
   let confidence = 0.97 - judgmentFindings * 0.04 - (status === "AMBER" ? 0.02 : 0);
-  confidence = Math.max(0.4, Math.min(0.99, Number(confidence.toFixed(2))));
+  // An abstention is a statement that the verdict is not reliable, so it must land below
+  // the confidence floor — otherwise the floor is decoration.
+  if (abstentionReasons.length) confidence = Math.min(confidence, 0.45);
+  confidence = Math.max(0.35, Math.min(0.99, Number(confidence.toFixed(2))));
 
   // consequence = reach × spend × (1 − reversibility) × severity × enforcement intensity
   const enforcement = market === "IN" ? 1.0 : 0.7;
@@ -385,6 +417,8 @@ export function evaluate(asset: Asset, opts: RuleSetOptions = RULESET_CURRENT): 
     routing,
     findings,
     timings: { deterministicMs, judgmentMs },
+    abstained: abstentionReasons.length > 0,
+    abstentionReasons,
     modelVersions: { deterministic: "pure-code", judgment: "local-rulepack", rulePack: opts.version },
     createdAt: new Date().toISOString(),
   };

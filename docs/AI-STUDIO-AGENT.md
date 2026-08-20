@@ -85,10 +85,9 @@ thing as agreement with the web app.
 > Now with 30% more.
 
 **Expected status:** abstain, routing "abstain", confidence < 0.6, empty findings
-**Expected rule ids:** none
+**Expected rule ids:** ASCI-IV-2
 
-> **The engine and the agent differ here, deliberately.** This is the one vector where the agent is expected to do something the deterministic engine cannot. The engine resolves "Now with 30% more" against the ledger, finds nothing, and reports an unsubstantiated claim under ASCI-I-1. That is a defensible answer — but the better answer is to notice that "30% more" than *what* is not stated, no product is identified, and there is nothing to resolve. Recognising that a question is unanswerable is a judgment-path capability, which is exactly why the agent is worth having on top of the engine.
-> For reference, the deterministic engine returns: ASCI-I-1.
+> **On abstention.** The engine now abstains here too, so the agent and the app agree. It fires ASCI-IV-2 — a comparison must be verifiable, and "30% more" names nothing to compare against — then declines to resolve the claim, because "more than the old formula", "more than a competitor" and "more than nothing" are three different assertions with three different verdicts. The agent should do the same: cite ASCI-IV-2 if it wishes, set routing to "abstain", keep confidence below 0.6, and say what it would need. What it must NOT do is report the claim as unsubstantiated, which presumes it knows what was claimed.
 
 ---
 
