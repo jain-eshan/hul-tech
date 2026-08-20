@@ -62,7 +62,7 @@ export default function LiveCheck() {
         type any ad copy · evaluated against the same rule set as every other screen
       </div>
 
-      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-7 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-7 items-start">
         <div data-tour="live-input" className="space-y-3">
           <textarea
             value={copy} onChange={(e) => setCopy(e.target.value)}

@@ -112,17 +112,17 @@ export default function CreatorSweep() {
       </div>
 
       {mounted && snap && snapPost && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-8 z-50" onClick={() => setSnapFor(null)}>
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 md:p-8 z-50" onClick={() => setSnapFor(null)}>
           <div className="bg-[var(--surface)] rounded border border-[var(--border)] max-w-3xl w-full max-h-full overflow-auto"
             onClick={(e) => e.stopPropagation()}>
-            <div className="px-5 py-3 border-b border-[var(--border)] flex items-center justify-between">
+            <div className="px-5 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 font-medium">
                 <Camera size={15} className="text-[var(--accent)]" />
                 Point-in-time evidence snapshot · {snapPost.handle}
               </div>
               <button onClick={() => setSnapFor(null)}><X size={15} /></button>
             </div>
-            <div className="grid grid-cols-[260px_1fr] gap-5 px-5 py-4">
+            <div className="grid grid-cols-1 sm:grid-cols-[260px_1fr] gap-5 px-5 py-4">
               <img src={snap.pngRef} alt={`Captured render of ${snapPost.handle}`}
                 className="w-full border border-[var(--border)] rounded" />
               <div className="space-y-2.5 text-[13px]">
@@ -134,7 +134,7 @@ export default function CreatorSweep() {
                   ["Size", `${(snap.bytes / 1024).toFixed(0)} KB`],
                   ["Collapsed regions expanded", String(snap.expandedRegions)],
                 ].map(([k, v]) => (
-                  <div key={k} className="grid grid-cols-[150px_1fr] gap-3">
+                  <div key={k} className="grid grid-cols-1 sm:grid-cols-[150px_1fr] gap-1 sm:gap-3">
                     <div className="section-header pt-0.5">{k}</div>
                     <div className="mono break-all">{v}</div>
                   </div>
@@ -161,10 +161,10 @@ export default function CreatorSweep() {
       )}
 
       {mounted && fixResult && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-8 z-50" onClick={() => setFixFor(null)}>
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 md:p-8 z-50" onClick={() => setFixFor(null)}>
           <div className="bg-[var(--surface)] rounded border border-[var(--border)] max-w-xl w-full"
             onClick={(e) => e.stopPropagation()}>
-            <div className="px-5 py-3 border-b border-[var(--border)] flex items-center justify-between">
+            <div className="px-5 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 font-medium">
                 <Send size={14} className="text-[var(--accent)]" />
                 Fix request · {fixResult.post.handle}
@@ -175,7 +175,7 @@ export default function CreatorSweep() {
             <pre className="px-5 py-4 text-[13px] leading-relaxed whitespace-pre-wrap font-sans">
 {fixRequest(fixResult)}
             </pre>
-            <div className="px-5 py-3 border-t border-[var(--border)] flex items-center justify-between">
+            <div className="px-5 py-3 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
               <span className="mono text-[var(--text-muted)]">
                 deadline 48h · escalates to agency, then to brand team
               </span>

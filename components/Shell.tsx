@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Stamp, RotateCcw } from "lucide-react";
+import { Stamp, RotateCcw, Menu, X } from "lucide-react";
 import { useApp, personaLabel } from "@/lib/store";
 import { RULE_SET_LABEL } from "@/data/rules";
 import { TourButton } from "./Tour";
@@ -32,6 +33,7 @@ const NAV: { group: string; items: { href: string; label: string }[] }[] = [
 export default function Shell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const { persona, setPersona, reset } = useApp();
+  const [navOpen, setNavOpen] = useState(false);
 
   // Fixture pages render bare. They exist to be captured by the snapshot pipeline as
   // if they were third-party pages, and a captured "creator post" wrapped in this
@@ -40,10 +42,28 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-[240px] shrink-0 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col sticky top-0 h-screen overflow-y-auto">
-        <div className="px-5 h-14 flex items-center gap-2 border-b border-[var(--border)]">
-          <Stamp size={17} strokeWidth={2.2} className="text-[var(--accent)]" />
-          <span className="font-semibold tracking-[0.14em] text-[13px]">PRAMAAN</span>
+      {/* Below md the sidebar is an off-canvas drawer; the backdrop closes it. */}
+      {navOpen && (
+        <div className="fixed inset-0 bg-black/30 z-30 md:hidden" onClick={() => setNavOpen(false)} />
+      )}
+
+      <aside
+        onClick={() => setNavOpen(false)}
+        className={cx(
+          "w-[240px] shrink-0 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col h-screen overflow-y-auto",
+          // Fixed pins it to the viewport as a drawer below md; sticky keeps it in
+          // place above md without the drawer's transform/backdrop machinery.
+          "fixed inset-y-0 left-0 z-40 transition-transform duration-200 md:sticky md:top-0 md:translate-x-0",
+          navOpen ? "translate-x-0" : "-translate-x-full",
+        )}>
+        <div className="px-5 h-14 flex items-center justify-between gap-2 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2">
+            <Stamp size={17} strokeWidth={2.2} className="text-[var(--accent)]" />
+            <span className="font-semibold tracking-[0.14em] text-[13px]">PRAMAAN</span>
+          </div>
+          <button aria-label="Close menu" onClick={() => setNavOpen(false)} className="md:hidden text-[var(--text-muted)]">
+            <X size={18} />
+          </button>
         </div>
 
         <nav className="flex-1 py-4">
@@ -75,7 +95,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
 
-        <div data-tour="persona" className="border-t border-[var(--border)] p-4 space-y-2">
+        <div data-tour="persona" className="border-t border-[var(--border)] p-4 space-y-2" onClick={(e) => e.stopPropagation()}>
           <div className="section-header">Signed in as</div>
           <select
             value={persona}
@@ -95,15 +115,18 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       <main className="flex-1 min-w-0 flex flex-col">
         {/* Top bar exists for one control. A judge arriving alone needs an obvious way
             in, and "read the sidebar and guess" is not one. */}
-        <div className="border-b border-[var(--border)] bg-[var(--surface)] px-8 h-14 flex items-center justify-end gap-4">
-          <span className="text-[13px] text-[var(--text-muted)]">
+        <div className="border-b border-[var(--border)] bg-[var(--surface)] px-4 md:px-8 h-14 flex items-center justify-between md:justify-end gap-4">
+          <button aria-label="Open menu" onClick={() => setNavOpen(true)} className="md:hidden text-[var(--text)]">
+            <Menu size={20} />
+          </button>
+          <span className="hidden sm:inline text-[13px] text-[var(--text-muted)]">
             First time here? Take the four-minute tour.
           </span>
           <TourButton />
         </div>
-        <div className="flex-1 max-w-[1280px] w-full px-8 py-7">{children}</div>
+        <div className="flex-1 max-w-[1280px] w-full px-4 md:px-8 py-7">{children}</div>
         {/* Persistent on every page. Scope honesty is cheaper than being caught (§10.2). */}
-        <footer className="border-t border-[var(--border)] px-8 py-2.5 mono text-[var(--text-muted)]">
+        <footer className="border-t border-[var(--border)] px-4 md:px-8 py-2.5 mono text-[var(--text-muted)]">
           Prototype · rule text paraphrased for machine execution · portfolio data illustrative · {RULE_SET_LABEL}
         </footer>
       </main>

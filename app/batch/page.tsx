@@ -56,7 +56,7 @@ export default function BatchReview() {
 
   return (
     <>
-      <div className="flex items-start justify-between mb-1">
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
         <h1 className="text-[24px] font-semibold">Rexona · &ldquo;The Fourth Official&rdquo;</h1>
         <button onClick={run} disabled={running}
           className="flex items-center gap-1.5 text-[13px] px-3 py-1.5 rounded bg-[var(--accent)] text-white disabled:opacity-50">

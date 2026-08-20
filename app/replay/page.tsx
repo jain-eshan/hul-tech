@@ -57,7 +57,7 @@ export default function RuleReplay() {
 
   return (
     <>
-      <div className="flex items-start justify-between mb-1">
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
         <h1 className="text-[24px] font-semibold">Rule Replay</h1>
         <button onClick={publish} disabled={phase === "running"}
           className="flex items-center gap-1.5 text-[13px] px-3 py-1.5 rounded bg-[var(--accent)] text-white disabled:opacity-50">
@@ -94,7 +94,7 @@ export default function RuleReplay() {
             </div>
           </div>
 
-          <div data-tour="replay-counter" className="flex gap-8 items-baseline mb-6 border-y border-[var(--border)] py-4">
+          <div data-tour="replay-counter" className="flex flex-wrap gap-x-8 gap-y-3 items-baseline mb-6 border-y border-[var(--border)] py-4">
             <div>
               <div className="section-header mb-1">Live assets re-evaluated</div>
               <div className="text-[34px] font-semibold leading-none tabular-nums">

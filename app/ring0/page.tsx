@@ -36,7 +36,7 @@ export default function Ring0() {
 
   return (
     <>
-      <div className="flex items-start justify-between mb-1">
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
         <h1 className="text-[24px] font-semibold">Constrain at generation</h1>
         <select value={market} onChange={(e) => setMarket(e.target.value as Market)}
           className="text-[13px] border border-[var(--border)] rounded px-2 py-1.5 bg-[var(--surface)]">
@@ -47,7 +47,7 @@ export default function Ring0() {
         the rules go into the generator, not the review queue · {RULE_SET_LABEL}
       </div>
 
-      <div data-tour="ring0-split" className="grid grid-cols-2 gap-5 mb-6">
+      <div data-tour="ring0-split" className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
         {[
           { title: "Without constraints", sub: "generate, then check", copy: UNCONSTRAINED, verdict: before },
           { title: "With constraints", sub: "the rules go in before generation", copy: CONSTRAINED, verdict: after },

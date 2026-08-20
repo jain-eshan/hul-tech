@@ -67,14 +67,14 @@ export default function Inbox() {
 
   return (
     <>
-      <div className="flex items-baseline justify-between mb-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-5">
         <h1 className="text-[24px] font-semibold">Inbox</h1>
         <div className="mono text-[var(--text-muted)]">
           {rows.length} assets · evaluated live by the engine
         </div>
       </div>
 
-      <div className="flex gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <StatCard label="Awaiting clearance" value={String(awaiting)} note="needs edit or blocked" />
         <StatCard label="Cleared" value={String(cleared)} note="ship without asking" />
         <StatCard label="First-pass rate" value={`${firstPass}%`} note="target 80%" />

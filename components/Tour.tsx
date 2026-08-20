@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { TOUR } from "@/lib/tour";
 import { useApp } from "@/lib/store";
@@ -16,6 +16,7 @@ interface Rect { top: number; left: number; width: number; height: number }
 
 export default function Tour({ onClose }: { onClose: () => void }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { setPersona } = useApp();
   const [i, setI] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
@@ -33,15 +34,22 @@ export default function Tour({ onClose }: { onClose: () => void }) {
     let cancelled = false;
     clearTimers();
     setBusy(true);
-    setRect(null);
+
+    // Consecutive steps often share a page (Batch, Asset Detail and Replay each run two
+    // steps back to back). Only blank the spotlight — and wait for a route to paint — when
+    // one is actually navigating. Otherwise the old highlight stays up and slides to the
+    // new target, instead of vanishing and reappearing on every single step.
+    const navigating = pathname !== step.route;
+    if (navigating) setRect(null);
 
     (async () => {
-      router.push(step.route);
+      if (navigating) {
+        router.push(step.route);
+        // Wait for the route to actually paint before looking for anything in it.
+        await new Promise((r) => timers.current.push(setTimeout(r, 420)));
+        if (cancelled) return;
+      }
       if (step.persona) setPersona(step.persona);
-
-      // Wait for the route to actually paint before looking for anything in it.
-      await new Promise((r) => timers.current.push(setTimeout(r, 420)));
-      if (cancelled) return;
 
       // Light the target BEFORE firing the action. A step that says "watch the chips
       // resolve" and then dims the chips while a card covers them is worse than no tour.
@@ -63,7 +71,11 @@ export default function Tour({ onClose }: { onClose: () => void }) {
             width: b.width,
             height: Math.max(80, Math.min(bottom - top, vh * 0.46)),
           });
+        } else {
+          setRect(null);
         }
+      } else {
+        setRect(null);
       }
 
       if (step.click) {
@@ -131,7 +143,7 @@ export default function Tour({ onClose }: { onClose: () => void }) {
       <div
         ref={cardRef}
         data-tour-card
-        className="absolute w-[430px] max-w-[calc(100vw-48px)] bg-[var(--surface)] border border-[var(--border)] rounded-lg shadow-xl"
+        className="absolute w-[430px] max-w-[calc(100vw-48px)] bg-[var(--surface)] border border-[var(--border)] rounded-lg shadow-xl transition-[top,left] duration-300"
         style={{ top: card.top, left: card.left, pointerEvents: "auto" }}>
 
         <div className="px-5 pt-4 pb-3">
