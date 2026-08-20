@@ -156,7 +156,7 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
       {!mounted ? (
         <div className="border border-[var(--border)] rounded bg-[var(--surface)] h-[420px]" />
       ) : (
-      <div className="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-7 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-7 items-start">
         <div data-tour="creative" className={cx(flash && "flash")}>
           <CreativeMock asset={asset} copy={copy} findings={shown} activeRule={activeRule} />
         </div>

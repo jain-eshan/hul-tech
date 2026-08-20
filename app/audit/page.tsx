@@ -83,11 +83,11 @@ export default function AuditTrail() {
       </div>
 
       {asset && verdict && (
-        <div className="fixed inset-0 bg-black/25 flex items-center justify-center p-8 z-50"
+        <div className="fixed inset-0 bg-black/25 flex items-center justify-center p-4 md:p-8 z-50"
           onClick={() => setPackFor(null)}>
           <div className="bg-[var(--surface)] rounded border border-[var(--border)] max-w-2xl w-full max-h-full overflow-auto"
             onClick={(e) => e.stopPropagation()}>
-            <div className="px-5 py-3 border-b border-[var(--border)] flex items-center justify-between">
+            <div className="px-5 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 font-medium">
                 <FileCheck size={15} className="text-[var(--accent)]" /> Regulator Response Pack
               </div>
@@ -105,7 +105,7 @@ export default function AuditTrail() {
                 ["Model versions", Object.entries(verdict.modelVersions).map(([k, v]) => `${k}=${v}`).join(", ")],
                 ["Snapshot", `sha-${asset.hash.slice(2)} captured ${asset.createdAt.slice(0, 10)}`],
               ].map(([k, v]) => (
-                <div key={k} className="grid grid-cols-[160px_1fr] gap-3">
+                <div key={k} className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-1 sm:gap-3">
                   <div className="section-header pt-0.5">{k}</div>
                   <div className="mono break-words">{v}</div>
                 </div>

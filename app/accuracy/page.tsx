@@ -48,7 +48,7 @@ export default function AccuracyCard() {
         measured live over {r.totalCases} labelled cases · rule set {RULE_SET_VERSION} · recomputed on load
       </div>
 
-      <div data-tour="accuracy-metrics" className="flex gap-3 mb-4">
+      <div data-tour="accuracy-metrics" className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
         <Metric label="Recall — high severity" value={pct(r.highSeverityRecall)} target="> 95%"
           met={r.highSeverityRecall > 0.95}
           note="Missing a RED is the only unacceptable failure." />
@@ -63,7 +63,7 @@ export default function AccuracyCard() {
           note={`Share of the ${r.cleanCases} clean cases that drew any finding.`} />
       </div>
 
-      <div className="flex gap-6 mono text-[var(--text-muted)] mb-6 border-y border-[var(--border)] py-3">
+      <div className="flex flex-wrap gap-x-6 gap-y-1 mono text-[var(--text-muted)] mb-6 border-y border-[var(--border)] py-3">
         <span>true positives {r.truePositives}</span>
         <span>false positives {r.falsePositives}</span>
         <span>false negatives {r.falseNegatives}</span>
