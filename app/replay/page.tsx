@@ -94,7 +94,7 @@ export default function RuleReplay() {
             </div>
           </div>
 
-          <div className="flex gap-8 items-baseline mb-6 border-y border-[var(--border)] py-4">
+          <div data-tour="replay-counter" className="flex gap-8 items-baseline mb-6 border-y border-[var(--border)] py-4">
             <div>
               <div className="section-header mb-1">Live assets re-evaluated</div>
               <div className="text-[34px] font-semibold leading-none tabular-nums">

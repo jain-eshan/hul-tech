@@ -157,11 +157,11 @@ export default function AssetDetail({ params }: { params: { id: string } }) {
         <div className="border border-[var(--border)] rounded bg-[var(--surface)] h-[420px]" />
       ) : (
       <div className="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-7 items-start">
-        <div className={cx(flash && "flash")}>
+        <div data-tour="creative" className={cx(flash && "flash")}>
           <CreativeMock asset={asset} copy={copy} findings={shown} activeRule={activeRule} />
         </div>
 
-        <div className="space-y-5">
+        <div data-tour="findings" className="space-y-5">
           <div className="flex items-center gap-3">
             <VerdictChip status={status} confidence={verdict.confidence} abstained={verdict.abstained}
               clearedIn={`evaluated in ${verdict.timings.deterministicMs + verdict.timings.judgmentMs}ms`} />

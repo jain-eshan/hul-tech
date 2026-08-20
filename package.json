@@ -10,7 +10,8 @@
     "verify": "tsx --tsconfig tsconfig.json scripts/verify-demos.ts",
     "standalone": "node scripts/build-standalone.mjs",
     "verify:standalone": "node scripts/verify-standalone.mjs",
-    "qa": "node scripts/qa-personas.mjs"
+    "qa": "node scripts/qa-personas.mjs",
+    "verify:tour": "node scripts/verify-tour.mjs"
   },
   "dependencies": {
     "clsx": "2.1.1",

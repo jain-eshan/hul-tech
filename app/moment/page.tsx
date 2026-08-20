@@ -102,7 +102,7 @@ export default function MomentRisk() {
         </p>
       </div>
 
-      <div className="space-y-3 mb-6">
+      <div data-tour="reasoning-cards" className="space-y-3 mb-6">
         {CARDS.map((c) => (
           <div key={c.n} className="border border-[var(--border)] rounded bg-[var(--surface)] px-4 py-3">
             <div className="flex items-baseline gap-2 mb-1.5">

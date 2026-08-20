@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Stamp, RotateCcw } from "lucide-react";
 import { useApp, personaLabel } from "@/lib/store";
 import { RULE_SET_VERSION } from "@/data/rules";
+import { TourButton } from "./Tour";
 import type { Persona } from "@/lib/types";
 import { cx } from "@/lib/ui";
 
@@ -74,7 +75,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
 
-        <div className="border-t border-[var(--border)] p-4 space-y-2">
+        <div data-tour="persona" className="border-t border-[var(--border)] p-4 space-y-2">
           <div className="section-header">Signed in as</div>
           <select
             value={persona}
@@ -92,6 +93,14 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <main className="flex-1 min-w-0 flex flex-col">
+        {/* Top bar exists for one control. A judge arriving alone needs an obvious way
+            in, and "read the sidebar and guess" is not one. */}
+        <div className="border-b border-[var(--border)] bg-[var(--surface)] px-8 h-14 flex items-center justify-end gap-4">
+          <span className="text-[13px] text-[var(--text-muted)]">
+            First time here? Take the four-minute tour.
+          </span>
+          <TourButton />
+        </div>
         <div className="flex-1 max-w-[1280px] w-full px-8 py-7">{children}</div>
         {/* Persistent on every page. Scope honesty is cheaper than being caught (§10.2). */}
         <footer className="border-t border-[var(--border)] px-8 py-2.5 mono text-[var(--text-muted)]">

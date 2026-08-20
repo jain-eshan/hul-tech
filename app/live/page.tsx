@@ -63,7 +63,7 @@ export default function LiveCheck() {
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-7 items-start">
-        <div className="space-y-3">
+        <div data-tour="live-input" className="space-y-3">
           <textarea
             value={copy} onChange={(e) => setCopy(e.target.value)}
             placeholder="Paste or type marketing copy…"

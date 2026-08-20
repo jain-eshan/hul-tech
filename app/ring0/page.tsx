@@ -46,7 +46,7 @@ export default function Ring0() {
         pramaan.constrain(brand, sku, market, channel) · rule set {pack.ruleSetVersion}
       </div>
 
-      <div className="grid grid-cols-2 gap-5 mb-6">
+      <div data-tour="ring0-split" className="grid grid-cols-2 gap-5 mb-6">
         {[
           { title: "Without Ring 0", sub: "generate, then check", copy: UNCONSTRAINED, verdict: before },
           { title: "With Ring 0", sub: "constraints injected before generation", copy: CONSTRAINED, verdict: after },

@@ -69,7 +69,7 @@ export default function BatchReview() {
       </div>
 
       {/* The market strip. */}
-      <div className="flex flex-wrap gap-2 mb-4" suppressHydrationWarning>
+      <div data-tour="market-strip" className="flex flex-wrap gap-2 mb-4" suppressHydrationWarning>
         {results.map((r, i) => {
           const isResolved = i < resolved;
           const s = r.verdict.status as VerdictStatus;
@@ -92,7 +92,7 @@ export default function BatchReview() {
         })}
       </div>
 
-      <div className="flex items-center gap-6 mb-7 text-[13px] border-y border-[var(--border)] py-3">
+      <div data-tour="verdict-summary" className="flex items-center gap-6 mb-7 text-[13px] border-y border-[var(--border)] py-3">
         {([["GREEN", "cleared"], ["AMBER", "needs edit"], ["RED", "blocked"]] as const).map(([s, label]) => (
           <span key={s} className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full" style={{ background: verdictColor[s] }} />
