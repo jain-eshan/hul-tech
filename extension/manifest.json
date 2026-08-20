@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "PRAMAAN — Brand Clearance",
+  "version": "0.1.0",
+  "description": "Ambient, inline brand-compliance checking inside Google Docs and Gmail. Grammarly for brand claims.",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://hul-tech.vercel.app/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://docs.google.com/document/*"],
+      "js": ["content/sidebar.js", "content/docs.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content/sidebar.js", "content/gmail.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
