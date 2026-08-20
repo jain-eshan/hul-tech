@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Stamp, RotateCcw } from "lucide-react";
 import { useApp, personaLabel } from "@/lib/store";
-import { RULE_SET_VERSION } from "@/data/rules";
+import { RULE_SET_LABEL } from "@/data/rules";
 import { TourButton } from "./Tour";
 import type { Persona } from "@/lib/types";
 import { cx } from "@/lib/ui";
@@ -17,7 +17,7 @@ const NAV: { group: string; items: { href: string; label: string }[] }[] = [
     { href: "/", label: "Inbox" },
     { href: "/batch", label: "Batch Review" },
     { href: "/moment", label: "Moment Risk" },
-    { href: "/ring0", label: "Ring 0" },
+    { href: "/ring0", label: "Constrain at generation" },
   ]},
   { group: "WATCH", items: [
     { href: "/watch", label: "Creator Sweep" },
@@ -40,7 +40,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-[240px] shrink-0 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col">
+      <aside className="w-[240px] shrink-0 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col sticky top-0 h-screen overflow-y-auto">
         <div className="px-5 h-14 flex items-center gap-2 border-b border-[var(--border)]">
           <Stamp size={17} strokeWidth={2.2} className="text-[var(--accent)]" />
           <span className="font-semibold tracking-[0.14em] text-[13px]">PRAMAAN</span>
@@ -104,7 +104,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         <div className="flex-1 max-w-[1280px] w-full px-8 py-7">{children}</div>
         {/* Persistent on every page. Scope honesty is cheaper than being caught (§10.2). */}
         <footer className="border-t border-[var(--border)] px-8 py-2.5 mono text-[var(--text-muted)]">
-          Prototype · rule text paraphrased for machine execution · portfolio data illustrative · rule set {RULE_SET_VERSION}
+          Prototype · rule text paraphrased for machine execution · portfolio data illustrative · {RULE_SET_LABEL}
         </footer>
       </main>
     </div>

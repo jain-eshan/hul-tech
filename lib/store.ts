@@ -73,8 +73,8 @@ export interface PersonaSpec {
   canOverride: boolean;
   canShip: boolean;
   canSetRouting: boolean;
-  /** Extra Inbox columns beyond the base set. */
-  columns: ("routing" | "severity" | "reach" | "spend")[];
+  /** Extra Inbox columns beyond the base set. "Who approves" is base for every role. */
+  columns: ("severity" | "reach" | "spend")[];
   /**
    * Legal's queue is judgment calls only (§3.2). The whole before/after in §3.1 is
    * "40 assets untriaged" becoming "4 flagged assets" — showing Legal all 60, of which
@@ -103,7 +103,7 @@ export const PERSONAS: Record<Persona, PersonaSpec> = {
     // Legal clears; it does not publish. PRAMAAN never publishes (§14.2).
     canShip: false,
     canSetRouting: false,
-    columns: ["routing", "severity"],
+    columns: ["severity"],
     defaultQueue: "needs_human",
   },
   director: {

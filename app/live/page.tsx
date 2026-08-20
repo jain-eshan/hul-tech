@@ -108,7 +108,7 @@ export default function LiveCheck() {
               ) : (
                 <div className="border border-[var(--border)] rounded bg-[#F0FDF4] px-4 py-3 text-[13px]"
                   style={{ color: "var(--verdict-green)" }}>
-                  Cleared. No findings against rule set v2026.08 for {market}.
+                  Cleared. No findings under the current rules for {market}.
                 </div>
               )}
             </div>

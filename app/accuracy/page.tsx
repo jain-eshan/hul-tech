@@ -5,7 +5,7 @@ import { computeAccuracy } from "@/lib/engine/accuracy";
 import { labelled } from "@/data/labelled";
 import { useMounted } from "@/lib/useMounted";
 import { verdictColor } from "@/lib/ui";
-import { RULE_SET_VERSION } from "@/data/rules";
+import { RULE_SET_LABEL } from "@/data/rules";
 
 // PRD §6 C6. Nobody in compliance publishes an accuracy card, which is exactly why
 // publishing one is the cheapest credibility available.
@@ -45,7 +45,7 @@ export default function AccuracyCard() {
     <>
       <h1 className="text-[24px] font-semibold mb-1">Accuracy Card</h1>
       <div className="mono text-[var(--text-muted)] mb-6">
-        measured live over {r.totalCases} labelled cases · rule set {RULE_SET_VERSION} · recomputed on load
+        measured live over {r.totalCases} labelled cases · {RULE_SET_LABEL} · recomputed on load
       </div>
 
       <div data-tour="accuracy-metrics" className="flex gap-3 mb-4">
@@ -121,8 +121,8 @@ export default function AccuracyCard() {
             than quietly applied.
           </li>
           <li>
-            <strong>Judgment rules are under-represented.</strong> The set leans on
-            deterministic checks, which are the easy half. Cultural and implied-superiority
+            <strong>AI-judgment rules are under-represented.</strong> The set leans on
+            rule checks, which are the easy half. Cultural and implied-superiority
             reasoning needs human adjudication to label at all.
           </li>
         </ul>

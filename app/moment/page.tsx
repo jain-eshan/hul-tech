@@ -92,7 +92,7 @@ export default function MomentRisk() {
           </span>
         </div>
         <div className="mono" style={{ color: verdictColor.RED, opacity: 0.85 }}>
-          confidence 0.86 · routing: full_chain · escalated to Brand Director
+          confidence 0.86 · needs Legal and the Brand Director · escalated
         </div>
         <p className="text-[13px] mt-3 leading-relaxed">
           <span className="section-header">Proposed activation</span><br />
