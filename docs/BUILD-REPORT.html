@@ -202,15 +202,15 @@
   <p class="eyebrow">Project NEXT · TechTonic Season 8 · Build report</p>
   <h1>PRAMAAN: what is built, what is not, and what I need from you</h1>
   <p class="standfirst">
-    The prototype engine and all three demos are complete and verified. The AI Studio
-    agent is written, tested and ready to publish as <code>Techtonic_Apex_PRAMAAN</code>.
-    Two graded artefacts remain: the Vercel deployment and the deck.
+    The product is finished and verified by 98 automated checks. A judge can now explore
+    it alone, unaided, in four minutes. What remains is not building — it is two
+    fifteen-minute publishing steps only you can perform, and a deck.
   </p>
   <div class="meta">
     <span>20 Aug 2026</span>
     <span>branch claude/prd-project-planning-huyu5w</span>
     <span>rule set v2026.08</span>
-    <span>9 commits</span>
+    <span>13 commits</span>
   </div>
 </header>
 
@@ -219,9 +219,11 @@
   <p class="section-note">Read this part even if you read nothing else.</p>
 
   <p>
-    The <strong>product</strong> is done. The engine, all nine screens, the three demos
-    and the full T0 feature set are built and verified by four automated suites that
-    all pass. You can open it right now and walk the pitch end to end, with the wifi off.
+    The <strong>product</strong> is done. The engine, ten screens, the three demos, the
+    full T0 feature set and a self-driving walkthrough are built and verified by five
+    automated suites — 98 checks, all passing. You can open it right now and walk the
+    pitch end to end with the wifi off, or hand it to someone and let them explore it
+    without you in the room.
   </p>
   <p>
     The <strong>submission</strong> is not. The PRD requires three artefacts and none is
@@ -278,6 +280,21 @@
   <p class="section-note">
     Every claim below is backed by a suite you can run yourself, not by my assertion.
   </p>
+
+  <h3>The guided walkthrough</h3>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">A judge can now understand this alone, in four minutes</span>
+      <span class="chip done">verified</span>
+      <p class="item-body">
+        A <strong>Guided walkthrough</strong> button, top right. Sixteen spotlighted steps
+        that <em>drive</em> the app rather than describe it: clearance runs, a fix applies,
+        the persona switches to Legal and the queue collapses, a rule publishes and the
+        portfolio re-evaluates. Every step names who it helps. The last one hands over —
+        type your own copy and see what comes back.
+      </p>
+    </div>
+  </div>
 
   <h3>The three demos</h3>
   <div class="items">
@@ -374,13 +391,15 @@
       </thead>
       <tbody>
         <tr><td><code>npm run verify</code></td><td class="num">12</td><td>Demo A resolves 9/2/1 and Demo C surfaces six, from the engine rather than a fixture</td></tr>
-        <tr><td><code>scripts/acceptance.mjs</code></td><td class="num">34</td><td>Every §13 criterion, driven in a real browser</td></tr>
+        <tr><td><code>scripts/acceptance.mjs</code></td><td class="num">51</td><td>Every §13 criterion, driven in a real browser</td></tr>
         <tr><td><code>scripts/offline-check.mjs</code></td><td class="num">12</td><td>Full walkthrough with the network down; zero external requests</td></tr>
         <tr><td><code>scripts/verify-standalone.mjs</code></td><td class="num">16</td><td>The single-file build, loaded over <code>file://</code> with all requests aborted</td></tr>
+        <tr><td><code>scripts/verify-tour.mjs</code></td><td class="num">7</td><td>All 16 tour steps advance; no card covers its target or lands off-screen</td></tr>
+        <tr><td><code>scripts/qa-personas.mjs</code></td><td class="num">—</td><td>Every route as every persona; reports issues rather than assertions. Currently zero</td></tr>
       </tbody>
     </table>
   </div>
-  <p style="margin-top:14px">All 74 pass.</p>
+  <p style="margin-top:14px">All 98 pass, and the persona sweep reports no issues.</p>
 
   <h3>Persona audit</h3>
   <p>
@@ -398,18 +417,106 @@
     Legal clears without publishing — because PRAMAAN clears, and publication is a
     separate human act.
   </p>
+  <h3>Abstention — the engine now declines rather than guesses</h3>
+  <p>
+    §5.4, §6 A9 and §14.2 all require abstaining rather than guessing, and the routing
+    branch existed — but confidence could never fall below the floor on ambiguity, so
+    the floor was decoration. Two gaps sat behind that.
+  </p>
+  <p>
+    <strong>ASCI-IV-2 was in the rule pack and never evaluated.</strong> A quantified
+    comparative with no stated basis is exactly what it exists to catch. Asked to clear
+    &ldquo;Now with 30% more&rdquo;, the engine now fires that clause, then declines to
+    resolve the claim and says what it would need — because <em>more than the old
+    formula</em>, <em>than a competitor</em> and <em>than nothing</em> are three
+    assertions with three different verdicts, and reporting it as unsubstantiated
+    presumes we know which was meant.
+  </p>
+  <p>
+    Deterministic findings are never suppressed by an abstention. Those are certain
+    whatever the context, which is the principled line between the two paths.
+  </p>
+
+  <h3>Persona walkthrough — seven issues found by walking as each role</h3>
+  <p>
+    All twelve routes, as each of the three personas. No runtime errors, no dead
+    navigation, no rendering artefacts. Seven issues worth fixing, all now fixed and
+    guarded.
+  </p>
+  <div class="items">
+    <div class="item">
+      <span class="item-title">Legal saw all 60 assets, not a triaged queue</span>
+      <span class="chip done">fixed</span>
+      <p class="item-body">
+        53 of them auto-cleared and never needed a human. §3.1's entire before/after is
+        &ldquo;40 assets untriaged&rdquo; becoming &ldquo;4 flagged assets&rdquo; — so we
+        were rendering the <em>before</em> picture inside the product that claims to fix
+        it. Legal now lands on the 21 that actually routed to a human, with the hidden
+        count stated, because the number filtered out is the argument.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Four controls looked live and did nothing</span>
+      <span class="chip done">fixed</span>
+      <p class="item-body">
+        Three on Moment Risk, plus Ship on Batch Review. Ship was the load-bearing one:
+        §14.2 says PRAMAAN never publishes, it clears — so it now records a
+        human-initiated release decision rather than pretending to publish.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">The governance model ran backwards on Moment Risk</span>
+      <span class="chip done">fixed</span>
+      <p class="item-body">
+        No persona gating at all, so an ABM could override a <em>refusal</em> — the
+        highest-consequence override in the product — while being unable to override a
+        spelling flag. Gated identically now.
+      </p>
+    </div>
+    <div class="item">
+      <span class="item-title">Three smaller gaps</span>
+      <span class="chip done">fixed</span>
+      <p class="item-body">
+        Asset Detail had no page title; Inbox rows were not clickable despite §11.3;
+        and creator fix requests were the one enforcement action that never reached the
+        append-only ledger — a hole in the evidence plane exactly where enforcement
+        happens.
+      </p>
+    </div>
+  </div>
+  <p style="margin-top:16px">
+    Three deviations are deliberate and stay: persona resets on refresh (§10.5 forbids
+    persistence), finding cards render open rather than on hover (§11.1 wants evidence
+    always visible), and the stat cards are computed by the engine instead of matching
+    the PRD's illustrative numbers.
+  </p>
 </section>
 
 <section>
   <h2>What is pending</h2>
   <p class="section-note">Split by whether it is blocked on you, on time, or on a deliberate decision.</p>
 
-  <h3>Blocked on a decision from you</h3>
+  <h3>Needs fifteen minutes of your time, not more building</h3>
   <div class="items">
+    <div class="item">
+      <span class="item-title">Publish the AI Studio agent</span>
+      <span class="chip pending">ready to paste</span>
+      <p class="item-body">
+        Paste <code>docs/AI-STUDIO-SYSTEM-INSTRUCTIONS.txt</code>, run the six test
+        vectors, save as <code>Techtonic_Apex_PRAMAAN</code>, share, and open the link
+        signed out. Needs a browser session on the team's Google account, which is the
+        only reason it is not already done. The highest-value item on this page — the
+        rulebook demands a published agent outright.
+      </p>
+    </div>
     <div class="item">
       <span class="item-title">Deploy to Vercel</span>
       <span class="chip blocked">needs GitHub access</span>
-      <p class="item-body">Grant the Vercel GitHub app access to the repository and I deploy in one call — with auto-deploy on every push thereafter.</p>
+      <p class="item-body">
+        Grant the Vercel GitHub app access to the repository and it deploys in one call,
+        with auto-deploy on every push thereafter. Not urgent for the demo — the app is
+        already live as a shareable page and as a single file that runs offline.
+      </p>
     </div>
   </div>
 
@@ -479,9 +586,8 @@
   <div class="q">
     <div class="q-head"><span class="q-num">01</span><span class="q-title">What is the team name?</span> <span class="chip done">answered</span></div>
     <p>
-      <strong>Apex.</strong> The agent is built and named <code>Techtonic_Apex_PRAMAAN</code>.
-      All that remains is the paste-and-share step in AI Studio, which needs a person
-      signed into the team's Google account.
+      <strong>Apex.</strong> The agent is built, tested and named
+      <code>Techtonic_Apex_PRAMAAN</code>. Only the paste-and-share step remains.
     </p>
   </div>
 
@@ -518,7 +624,7 @@
       I cannot judge whether that reads as clever or as too neat to a panel that knows the
       category. You can.
     </p>
-    <p class="q-default"><strong>Default:</strong> it ships as built. Changing the scenario is about thirty minutes since only the copy changes.</p>
+    <p class="q-default"><strong>Default:</strong> it ships as built, and the guided walkthrough now leads a judge through it with the reasoning explained. Changing the scenario is about thirty minutes, since only the copy changes.</p>
   </div>
 
   <div class="q">
@@ -629,9 +735,11 @@
   <h2>Risks I would flag</h2>
   <ul>
     <li>
-      <strong>Nothing is deployed and nothing is recorded.</strong> This is the largest gap
-      and both are cheap. The single-file build partly covers it — it runs from a laptop
-      with the wifi off, which is a stronger mitigation than a video.
+      <strong>Nothing is recorded.</strong> §16 makes pre-recorded demos the entire
+      mitigation for a failed live demo. Two things now cover it better than a video
+      would: the single-file build runs from a laptop with the wifi off, and the guided
+      walkthrough means a judge can drive the demo themselves if the presenter cannot.
+      Recordings are still worth thirty minutes.
     </li>
     <li>
       <strong>The accuracy card reads 100%.</strong> A sharp judge will push on that. The

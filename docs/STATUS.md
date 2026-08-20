@@ -15,6 +15,10 @@ One line per phase. This is the handoff if a session or usage limit resets mid-b
 
 | 6 · T0 completion | 20 Aug 10:30 IST | **done** | Ring 0, accuracy card, evidence snapshot, creator sweep |
 | 7 · Spec details | 20 Aug 10:30 IST | **done** | Keyboard map, bounding boxes, progressive disclosure |
+| 8 · Standalone build | 20 Aug 12:10 IST | **done** | Whole app as one self-contained HTML file; hosted as an Artifact |
+| 9 · Engine abstention | 20 Aug 13:20 IST | **done** | ASCI-IV-2 evaluated; abstains on ambiguity instead of guessing |
+| 10 · Persona QA pass | 20 Aug 14:00 IST | **done** | Seven issues found by walking as each role, all fixed |
+| 11 · Guided walkthrough | 20 Aug 15:00 IST | **done** | 16-step self-driving tour behind a top-right button |
 
 **Still cut**: PULSE (portfolio exposure), MEMORY (precedent search), marketplace monitoring.
 WATCH now exists as Creator Sweep with a real capture pipeline over local fixtures.
@@ -45,11 +49,18 @@ Writing the labels **before** measuring found three real engine defects:
 One **label** was also wrong and is corrected in place with the reasoning recorded, because
 silently retuning labels to match an engine is how an accuracy card becomes worthless.
 
-## Acceptance (`node scripts/acceptance.mjs`, real browser)
+## Verification — 98 checks across five suites, all passing
 
-17/17 pass, including the four §13 criteria that carry the demos: the strip animating
-to 9/2/1, Apply mutating copy and clearing the asset, Replay producing its six assets
-from the engine, and Live Check never showing an error.
+| Suite | Command | Checks | Guards |
+|---|---|---|---|
+| Engine invariants | `npm run verify` | 12 | Demo A resolves 9/2/1 and Demo C surfaces six, from the engine |
+| Acceptance | `node scripts/acceptance.mjs` | 51 | Every §13 criterion, driven in a real browser |
+| Offline | `node scripts/offline-check.mjs` | 12 | Full walkthrough with the network down |
+| Standalone | `npm run verify:standalone` | 16 | The single-file build over `file://`, all requests aborted |
+| Guided tour | `npm run verify:tour` | 7 | All 16 steps advance; no card covers its target or lands off-screen |
+
+`npm run qa` sweeps every route as every persona and reports issues rather than
+assertions. Currently zero.
 
 ## Engine facts verified (`npm run verify`)
 

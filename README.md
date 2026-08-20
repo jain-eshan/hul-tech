@@ -41,9 +41,18 @@ Without a key, every screen still works. The walkthrough is designed to run with
 
 ---
 
+## Start here: the guided walkthrough
+
+Press **Guided walkthrough**, top right. Sixteen spotlighted steps, about four minutes,
+and it drives the app rather than describing it — clearance runs, a fix applies, the
+persona switches to Legal, a rule publishes and the portfolio re-evaluates.
+
+It is built for someone exploring alone. Every step names who it helps, and the last one
+hands over: type your own copy into Live Check and see what comes back.
+
 ## The three demos, in walkthrough order
 
-Open with the market strip, not the architecture.
+If you would rather drive yourself. Open with the market strip, not the architecture.
 
 | | Screen | What to do | What it proves |
 |---|---|---|---|
