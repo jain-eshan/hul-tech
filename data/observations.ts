@@ -20,73 +20,73 @@ export const snapshots: Snapshot[] = [
   {
     "id": "OBS-CR-01",
     "postId": "CR-01",
-    "url": "http://localhost:3170/fixtures/post/CR-01",
+    "url": "http://localhost:3192/fixtures/post/CR-01",
     "pngRef": "/snapshots/CR-01.png",
     "domRef": "/snapshots/CR-01.html",
-    "pngHash": "sha256-7656eb5d0669776e7ab412da6c5f9b24",
-    "domHash": "sha256-32219d622d032af2943ef368da2ed6a9",
-    "capturedAt": "2026-08-20T00:05:29.319Z",
+    "pngHash": "sha256-c636424b52106f198bb66bf755e4b001",
+    "domHash": "sha256-aa743d4759ae58f828acae185dd065ad",
+    "capturedAt": "2026-08-20T00:13:45.443Z",
     "expandedRegions": 1,
-    "bytes": 333557
+    "bytes": 20321
   },
   {
     "id": "OBS-CR-02",
     "postId": "CR-02",
-    "url": "http://localhost:3170/fixtures/post/CR-02",
+    "url": "http://localhost:3192/fixtures/post/CR-02",
     "pngRef": "/snapshots/CR-02.png",
     "domRef": "/snapshots/CR-02.html",
-    "pngHash": "sha256-f48a9fef7f9710f3022d745a792a9863",
-    "domHash": "sha256-5c3af3ec395a43c7e12e1db6aaa8ee8c",
-    "capturedAt": "2026-08-20T00:05:29.732Z",
+    "pngHash": "sha256-700b7d244c10b5e5f331dad94c9e132e",
+    "domHash": "sha256-acc5f136565eba3c4ed09dd9be1bf106",
+    "capturedAt": "2026-08-20T00:13:45.625Z",
     "expandedRegions": 1,
-    "bytes": 351585
+    "bytes": 24759
   },
   {
     "id": "OBS-CR-03",
     "postId": "CR-03",
-    "url": "http://localhost:3170/fixtures/post/CR-03",
+    "url": "http://localhost:3192/fixtures/post/CR-03",
     "pngRef": "/snapshots/CR-03.png",
     "domRef": "/snapshots/CR-03.html",
-    "pngHash": "sha256-ed7caf3f4d177300b7b1a615e19cef63",
-    "domHash": "sha256-d67b91873a2e543c98afb86d800c1ac1",
-    "capturedAt": "2026-08-20T00:05:30.103Z",
+    "pngHash": "sha256-9a8b995ebbb7e0f22bab544cd50a2592",
+    "domHash": "sha256-9cd27fb6b86284164fc9d9e7f28539cb",
+    "capturedAt": "2026-08-20T00:13:45.791Z",
     "expandedRegions": 0,
-    "bytes": 331735
+    "bytes": 19507
   },
   {
     "id": "OBS-CR-04",
     "postId": "CR-04",
-    "url": "http://localhost:3170/fixtures/post/CR-04",
+    "url": "http://localhost:3192/fixtures/post/CR-04",
     "pngRef": "/snapshots/CR-04.png",
     "domRef": "/snapshots/CR-04.html",
-    "pngHash": "sha256-c420a53b63483355963a0a8d229a7611",
-    "domHash": "sha256-918d0582aa6bc14cfbaa7cbbcdb27018",
-    "capturedAt": "2026-08-20T00:05:30.489Z",
+    "pngHash": "sha256-cb47e71221b44908348c98c7256a0d76",
+    "domHash": "sha256-c2a7efeec91f4436054cc2f4db62cd63",
+    "capturedAt": "2026-08-20T00:13:45.956Z",
     "expandedRegions": 1,
-    "bytes": 336006
+    "bytes": 20111
   },
   {
     "id": "OBS-CR-05",
     "postId": "CR-05",
-    "url": "http://localhost:3170/fixtures/post/CR-05",
+    "url": "http://localhost:3192/fixtures/post/CR-05",
     "pngRef": "/snapshots/CR-05.png",
     "domRef": "/snapshots/CR-05.html",
-    "pngHash": "sha256-35391ff8799ea4147f3bcc5984f3bc13",
-    "domHash": "sha256-39aa5bdc8748e9cc8c1875ca9ff94820",
-    "capturedAt": "2026-08-20T00:05:30.871Z",
+    "pngHash": "sha256-8bde51b6ac75ff67eb889523b91362d0",
+    "domHash": "sha256-db52e8798025815b671e8201c942ee2d",
+    "capturedAt": "2026-08-20T00:13:46.124Z",
     "expandedRegions": 0,
-    "bytes": 334502
+    "bytes": 20169
   },
   {
     "id": "OBS-CR-06",
     "postId": "CR-06",
-    "url": "http://localhost:3170/fixtures/post/CR-06",
+    "url": "http://localhost:3192/fixtures/post/CR-06",
     "pngRef": "/snapshots/CR-06.png",
     "domRef": "/snapshots/CR-06.html",
-    "pngHash": "sha256-7c114c842fb3bff9a2ea0bd4d907279f",
-    "domHash": "sha256-7ffa373dfc43c72b1893e5dc2875297b",
-    "capturedAt": "2026-08-20T00:05:31.252Z",
+    "pngHash": "sha256-44e2ec8cebcde658d050c182e02a3c2c",
+    "domHash": "sha256-fd16c8e2c4e2d2acadc274096c34479d",
+    "capturedAt": "2026-08-20T00:13:46.291Z",
     "expandedRegions": 0,
-    "bytes": 333413
+    "bytes": 20429
   }
 ];

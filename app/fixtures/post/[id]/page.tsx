@@ -27,16 +27,18 @@ export default function FixturePost({ params }: { params: { id: string } }) {
 
   return (
     <div style={{ background: "#fff", minHeight: "100vh", padding: 24, fontFamily: "Inter, system-ui, sans-serif" }}>
-      <div style={{ maxWidth: 470, margin: "0 auto", border: "1px solid #dbdbdb", borderRadius: 8, overflow: "hidden" }}>
+      <div data-post-card style={{ maxWidth: 470, margin: "0 auto", border: "1px solid #dbdbdb", borderRadius: 8, overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderBottom: "1px solid #efefef" }}>
-          <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg,#f09433,#dc2743,#bc1888)" }} />
+          <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#dc2743" }} />
           <div>
             <div style={{ fontSize: 13, fontWeight: 600 }}>{post.handle}</div>
             <div style={{ fontSize: 11, color: "#8e8e8e" }}>{post.followers} followers · {post.platform}</div>
           </div>
         </div>
 
-        <div style={{ aspectRatio: "1/1", background: "linear-gradient(150deg,#e8e2d9,#cfc6b8)", display: "flex", alignItems: "flex-end", padding: 18 }}>
+        {/* Flat fill rather than a gradient: PNG compresses a gradient's dithering
+            terribly, and the snapshot exists to preserve what the caption SAID. */}
+        <div style={{ aspectRatio: "1/1", background: "#ded7cc", display: "flex", alignItems: "flex-end", padding: 18 }}>
           <div style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "#5c5346", fontWeight: 600 }}>
             {post.brand}
           </div>

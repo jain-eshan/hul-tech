@@ -26,7 +26,10 @@ const browser = await chromium.launch({
   executablePath: "/opt/pw-browsers/chromium",
   args: ["--no-proxy-server"],
 });
-const page = await browser.newPage({ viewport: { width: 560, height: 900 }, deviceScaleFactor: 2 });
+// 1x at post width. The snapshot is evidence of what the page said, not a print
+// asset — a 2x retina capture quadrupled the bytes without adding any legibility
+// that matters for reading a caption.
+const page = await browser.newPage({ viewport: { width: 500, height: 820 }, deviceScaleFactor: 1 });
 
 const observations = [];
 
@@ -42,8 +45,16 @@ for (const post of creatorPosts) {
     return hidden.length;
   });
 
-  const png = await page.screenshot({ fullPage: true });
-  const dom = await page.content();
+  // Capture the post card itself rather than the full page. The surrounding page
+  // chrome is not evidence of anything and dominated the file size.
+  const card = page.locator("[data-post-card]").first();
+  const png = await ((await card.count()) ? card.screenshot() : page.screenshot({ fullPage: true }));
+  // Strip the framework's own hydration payload. The snapshot is evidence of what the
+  // page said to a reader; Next.js script blobs are neither readable nor evidential,
+  // and they were four fifths of the stored bytes.
+  const dom = (await page.content())
+    .replace(/<script[\s\S]*?<\/script>/g, "")
+    .replace(/<link[^>]*rel="preload"[^>]*>/g, "");
   const capturedAt = new Date().toISOString();
 
   writeFileSync(`${OUT}/${post.id}.png`, png);
